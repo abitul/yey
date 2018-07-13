@@ -12,11 +12,11 @@ class RegionService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Futsalfield.listOrderByLastUpdate(order: "desc") : Futsalfield.findAllByFutsalfieldNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "futsalfieldName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Region.listOrderByLastUpdate(order: "desc") : Region.findAllByRegionNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "regionName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
-            result = [message: "failed get data futsalfield"]
+            result = [message: "failed get data region"]
         }
 
         return result
@@ -24,17 +24,17 @@ class RegionService {
 
     def saveData(params) {
         try{
-            def futsalfield = new Futsalfield()
+            def region = new Region()
             print lastUpdate
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            region.regionName = params.regionName
+            region.typeRegion = params.typeRegion
+            region.lastUpdate = lastUpdate
+            region.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
-            result = [message: "failed save data futsalfield"]
+            result = [message: "failed save data region"]
         }
 
         return result
@@ -42,17 +42,17 @@ class RegionService {
 
     def updateData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            print futsalfield
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            def region = Region.get(params.id)
+            print region
+            region.regionName = params.regionName
+            region.typeRegion = params.typeRegion
+            region.lastUpdate = lastUpdate
+            region.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
             print e
-            result = [message: "failed update data futsalfield"]
+            result = [message: "failed update data region"]
         }
 
         return result
@@ -60,13 +60,13 @@ class RegionService {
 
     def deleteData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            futsalfield.delete()
+            def region = Region.get(params.id)
+            region.delete()
             result = [message: "success delete"]
         }catch(e){
             print "error deleting data"
             print e
-            result = [message: "failed delete data futsalfield"]
+            result = [message: "failed delete data region"]
         }
 
         return result

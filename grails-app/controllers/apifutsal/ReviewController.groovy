@@ -4,30 +4,30 @@ class ReviewController {
 
     static responseFormats = ['json']
 
-    FutsalfieldService futsalfieldService
+    ReviewService reviewService
     def responseOfRequest
 
     def show(params) { 
         print params
-        responseOfRequest = futsalfieldService.showData(params)
+        responseOfRequest = reviewService.showData(params)
         respond responseOfRequest
     }
 
     def save(){
         print request.JSON
-        responseOfRequest = futsalfieldService.saveData(request.JSON)
+        responseOfRequest = reviewService.saveData(request.JSON)
         respond responseOfRequest
     }
 
     def update(){
         print request.JSON
-        responseOfRequest = futsalfieldService.updateData(request.JSON)
+        responseOfRequest = reviewService.updateData(request.JSON)
         respond responseOfRequest
     }
 
     def delete(){
         print request.JSON
-        responseOfRequest = futsalfieldService.deleteData(request.JSON)
+        responseOfRequest = reviewService.deleteData(request.JSON)
         respond responseOfRequest
     }
 }

@@ -12,11 +12,11 @@ class SosmedService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Futsalfield.listOrderByLastUpdate(order: "desc") : Futsalfield.findAllByFutsalfieldNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "futsalfieldName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Sosmed.listOrderByLastUpdate(order: "desc") : Sosmed.findAllBySosmedNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "sosmedName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
-            result = [message: "failed get data futsalfield"]
+            result = [message: "failed get data sosmed"]
         }
 
         return result
@@ -24,17 +24,17 @@ class SosmedService {
 
     def saveData(params) {
         try{
-            def futsalfield = new Futsalfield()
+            def sosmed = new Sosmed()
             print lastUpdate
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            sosmed.sosmedName = params.sosmedName
+            sosmed.typeSosmed = params.typeSosmed
+            sosmed.lastUpdate = lastUpdate
+            sosmed.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
-            result = [message: "failed save data futsalfield"]
+            result = [message: "failed save data sosmed"]
         }
 
         return result
@@ -42,17 +42,17 @@ class SosmedService {
 
     def updateData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            print futsalfield
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            def sosmed = Sosmed.get(params.id)
+            print sosmed
+            sosmed.sosmedName = params.sosmedName
+            sosmed.typeSosmed = params.typeSosmed
+            sosmed.lastUpdate = lastUpdate
+            sosmed.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
             print e
-            result = [message: "failed update data futsalfield"]
+            result = [message: "failed update data sosmed"]
         }
 
         return result
@@ -60,13 +60,13 @@ class SosmedService {
 
     def deleteData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            futsalfield.delete()
+            def sosmed = Sosmed.get(params.id)
+            sosmed.delete()
             result = [message: "success delete"]
         }catch(e){
             print "error deleting data"
             print e
-            result = [message: "failed delete data futsalfield"]
+            result = [message: "failed delete data sosmed"]
         }
 
         return result

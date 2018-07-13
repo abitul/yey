@@ -12,11 +12,11 @@ class ReviewService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Futsalfield.listOrderByLastUpdate(order: "desc") : Futsalfield.findAllByFutsalfieldNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "futsalfieldName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Review.listOrderByLastUpdate(order: "desc") : Review.findAllByReviewNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "reviewName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
-            result = [message: "failed get data futsalfield"]
+            result = [message: "failed get data review"]
         }
 
         return result
@@ -24,17 +24,17 @@ class ReviewService {
 
     def saveData(params) {
         try{
-            def futsalfield = new Futsalfield()
+            def review = new Review()
             print lastUpdate
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            review.reviewName = params.reviewName
+            review.typeReview = params.typeReview
+            review.lastUpdate = lastUpdate
+            review.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
-            result = [message: "failed save data futsalfield"]
+            result = [message: "failed save data review"]
         }
 
         return result
@@ -42,17 +42,17 @@ class ReviewService {
 
     def updateData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            print futsalfield
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            def review = Review.get(params.id)
+            print review
+            review.reviewName = params.reviewName
+            review.typeReview = params.typeReview
+            review.lastUpdate = lastUpdate
+            review.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
             print e
-            result = [message: "failed update data futsalfield"]
+            result = [message: "failed update data review"]
         }
 
         return result
@@ -60,13 +60,13 @@ class ReviewService {
 
     def deleteData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            futsalfield.delete()
+            def review = Review.get(params.id)
+            review.delete()
             result = [message: "success delete"]
         }catch(e){
             print "error deleting data"
             print e
-            result = [message: "failed delete data futsalfield"]
+            result = [message: "failed delete data review"]
         }
 
         return result

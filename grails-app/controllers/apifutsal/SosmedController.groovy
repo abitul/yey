@@ -4,30 +4,30 @@ class SosmedController {
 
     static responseFormats = ['json']
 
-    FutsalfieldService futsalfieldService
+    SosmedService sosmedService
     def responseOfRequest
 
     def show(params) { 
         print params
-        responseOfRequest = futsalfieldService.showData(params)
+        responseOfRequest = sosmedService.showData(params)
         respond responseOfRequest
     }
 
     def save(){
         print request.JSON
-        responseOfRequest = futsalfieldService.saveData(request.JSON)
+        responseOfRequest = sosmedService.saveData(request.JSON)
         respond responseOfRequest
     }
 
     def update(){
         print request.JSON
-        responseOfRequest = futsalfieldService.updateData(request.JSON)
+        responseOfRequest = sosmedService.updateData(request.JSON)
         respond responseOfRequest
     }
 
     def delete(){
         print request.JSON
-        responseOfRequest = futsalfieldService.deleteData(request.JSON)
+        responseOfRequest = sosmedService.deleteData(request.JSON)
         respond responseOfRequest
     }
 }

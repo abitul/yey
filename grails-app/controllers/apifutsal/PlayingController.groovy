@@ -4,30 +4,30 @@ class PlayingController {
 
     static responseFormats = ['json']
 
-    FutsalfieldService futsalfieldService
+    PlayingService playingService
     def responseOfRequest
 
     def show(params) { 
         print params
-        responseOfRequest = futsalfieldService.showData(params)
+        responseOfRequest = playingService.showData(params)
         respond responseOfRequest
     }
 
     def save(){
         print request.JSON
-        responseOfRequest = futsalfieldService.saveData(request.JSON)
+        responseOfRequest = playingService.saveData(request.JSON)
         respond responseOfRequest
     }
 
     def update(){
         print request.JSON
-        responseOfRequest = futsalfieldService.updateData(request.JSON)
+        responseOfRequest = playingService.updateData(request.JSON)
         respond responseOfRequest
     }
 
     def delete(){
         print request.JSON
-        responseOfRequest = futsalfieldService.deleteData(request.JSON)
+        responseOfRequest = playingService.deleteData(request.JSON)
         respond responseOfRequest
     }
 }

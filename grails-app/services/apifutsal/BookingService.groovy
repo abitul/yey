@@ -11,11 +11,11 @@ def result
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Futsalfield.listOrderByLastUpdate(order: "desc") : Futsalfield.findAllByFutsalfieldNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "futsalfieldName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Booking.listOrderByLastUpdate(order: "desc") : Booking.findAllByBookingNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "bookingName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
-            result = [message: "failed get data futsalfield"]
+            result = [message: "failed get data booking"]
         }
 
         return result
@@ -23,17 +23,17 @@ def result
 
     def saveData(params) {
         try{
-            def futsalfield = new Futsalfield()
+            def booking = new Booking()
             print lastUpdate
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            booking.bookingName = params.bookingName
+            booking.typeBooking = params.typeBooking
+            booking.lastUpdate = lastUpdate
+            booking.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
-            result = [message: "failed save data futsalfield"]
+            result = [message: "failed save data booking"]
         }
 
         return result
@@ -41,17 +41,17 @@ def result
 
     def updateData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            print futsalfield
-            futsalfield.futsalfieldName = params.futsalfieldName
-            futsalfield.typeFutsalfield = params.typeFutsalfield
-            futsalfield.lastUpdate = lastUpdate
-            futsalfield.save(flush: true, failOnError: true)
+            def booking = Booking.get(params.id)
+            print booking
+            booking.bookingName = params.bookingName
+            booking.typeBooking = params.typeBooking
+            booking.lastUpdate = lastUpdate
+            booking.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
             print e
-            result = [message: "failed update data futsalfield"]
+            result = [message: "failed update data booking"]
         }
 
         return result
@@ -59,13 +59,13 @@ def result
 
     def deleteData(params) {
         try{
-            def futsalfield = Futsalfield.get(params.id)
-            futsalfield.delete()
+            def booking = Booking.get(params.id)
+            booking.delete()
             result = [message: "success delete"]
         }catch(e){
             print "error deleting data"
             print e
-            result = [message: "failed delete data futsalfield"]
+            result = [message: "failed delete data booking"]
         }
 
         return result
