@@ -12,7 +12,7 @@ class FutsalfieldService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Futsalfield.listOrderByLastUpdate(order: "desc") : Futsalfield.findAllByFutsalfieldNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "futsalfieldName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Futsalfield.listOrderByLastUpdate(order: "desc") : Futsalfield.findAllByFutsalfieldNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "futsalfieldName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e

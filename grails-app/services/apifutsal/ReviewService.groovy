@@ -12,7 +12,7 @@ class ReviewService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Review.listOrderByLastUpdate(order: "desc") : Review.findAllByReviewNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "reviewName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Review.listOrderByLastUpdate(order: "desc") : Review.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
@@ -20,14 +20,17 @@ class ReviewService {
         }
 
         return result
-    }
+    } 
 
     def saveData(params) {
         try{
             def review = new Review()
             print lastUpdate
-            review.reviewName = params.reviewName
-            review.typeReview = params.typeReview
+            review.title = params.title
+            review.comment = params.comment
+            review.star = params.star
+            review.idReviewed = params.idReviewed
+            review.idReviewer = params.idReviewer
             review.lastUpdate = lastUpdate
             review.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
@@ -44,8 +47,11 @@ class ReviewService {
         try{
             def review = Review.get(params.id)
             print review
-            review.reviewName = params.reviewName
-            review.typeReview = params.typeReview
+            review.title = params.title
+            review.comment = params.comment
+            review.star = params.star
+            review.idReviewed = params.idReviewed
+            review.idReviewer = params.idReviewer
             review.lastUpdate = lastUpdate
             review.save(flush: true, failOnError: true)
             result = [message: "success update data"]

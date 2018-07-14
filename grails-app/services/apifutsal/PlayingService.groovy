@@ -12,7 +12,7 @@ class PlayingService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Playing.listOrderByLastUpdate(order: "desc") : Playing.findAllByPlayingNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "playingName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Playing.listOrderByLastUpdate(order: "desc") : Playing.findAllByTeamVersusIlike("%${params.searchValue}%",[max: params.int("max"), sort: "teamVersus", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
@@ -26,8 +26,9 @@ class PlayingService {
         try{
             def playing = new Playing()
             print lastUpdate
-            playing.playingName = params.playingName
-            playing.typePlaying = params.typePlaying
+            playing.type = params.type
+            playing.idVersus = params.idVersus
+            playing.teamVersus = params.teamVersus
             playing.lastUpdate = lastUpdate
             playing.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
@@ -44,8 +45,9 @@ class PlayingService {
         try{
             def playing = Playing.get(params.id)
             print playing
-            playing.playingName = params.playingName
-            playing.typePlaying = params.typePlaying
+            playing.type = params.type
+            playing.idVersus = params.idVersus
+            playing.teamVersus = params.teamVersus
             playing.lastUpdate = lastUpdate
             playing.save(flush: true, failOnError: true)
             result = [message: "success update data"]

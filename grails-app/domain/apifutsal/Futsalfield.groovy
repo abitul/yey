@@ -9,6 +9,9 @@ class Futsalfield {
     Long price
     Date lastUpdate
 
+    static belongsTo = [stadion: Stadion]
+    static hasMany = [reviews: Review, images: Image]
+
     static constraints = {
         id generator: 'sequence'
         name size: 1..50, blank: false, nullable: false

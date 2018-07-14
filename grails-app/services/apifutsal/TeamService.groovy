@@ -14,7 +14,7 @@ class TeamService {
         try{
             println lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            def listData = params.searchValue == "" ? Team.listOrderByLastUpdate(order: "desc") : Team.findAllByTeamNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "teamName", order: "desc", offset: offset])
+            def listData = params.searchValue == "" ? Team.listOrderByLastUpdate(order: "desc") : Team.findAllByTeamNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "teamName", order: "desc", offset: offset])
             result = []
             listData.each{res->
                 def objectData = [

@@ -12,7 +12,7 @@ class SosmedService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Sosmed.listOrderByLastUpdate(order: "desc") : Sosmed.findAllBySosmedNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "sosmedName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Sosmed.listOrderByLastUpdate(order: "desc") : Sosmed.findAllBySosmedNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "sosmedName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
@@ -26,8 +26,8 @@ class SosmedService {
         try{
             def sosmed = new Sosmed()
             print lastUpdate
-            sosmed.sosmedName = params.sosmedName
-            sosmed.typeSosmed = params.typeSosmed
+            sosmed.name = params.name
+            sosmed.type = params.type
             sosmed.lastUpdate = lastUpdate
             sosmed.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
@@ -44,8 +44,8 @@ class SosmedService {
         try{
             def sosmed = Sosmed.get(params.id)
             print sosmed
-            sosmed.sosmedName = params.sosmedName
-            sosmed.typeSosmed = params.typeSosmed
+            sosmed.name = params.name
+            sosmed.type = params.type
             sosmed.lastUpdate = lastUpdate
             sosmed.save(flush: true, failOnError: true)
             result = [message: "success update data"]

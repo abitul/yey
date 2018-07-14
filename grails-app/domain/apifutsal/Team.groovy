@@ -12,6 +12,8 @@ class Team {
     boolean isReadyToMatch
     Date lastUpdate 
 
+    static hasMany = [images:Image, players: Player, reviews: Review, sosmeds: Sosmed, bookings: Booking, matchrecords: Matchrecord]
+
     static constraints = {
         id generator: 'sequence'
         idCard size: 5..20, blank: false, nullable: false, unique: true

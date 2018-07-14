@@ -8,6 +8,9 @@ class Player {
     String contactNo
     Date lastUpdate
 
+    static belongsTo = [team: Team]
+    static hasMany = [sosmeds: Sosmed]
+
     static constraints = {
         id generator: 'sequence'
         playerName size: 1..50, blank: false, nullable: false

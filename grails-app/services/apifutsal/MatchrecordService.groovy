@@ -6,13 +6,13 @@ import grails.transaction.Transactional
 class MatchrecordService {
 
     def result 
-    def lastUpdate = new Date()
+    def createdDate = new Date()
 
     def showData(params) {
         try{
-            print lastUpdate
+            print createdDate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Matchrecord.listOrderByLastUpdate(order: "desc") : Matchrecord.findAllByMatchrecordNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "matchrecordName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Matchrecord.listOrderByCreatedDate(order: "desc") : Matchrecord.findAllByStatusIlike("%${params.searchValue}%",[max: params.int("max"), sort: "status", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
@@ -25,10 +25,10 @@ class MatchrecordService {
     def saveData(params) {
         try{
             def matchrecord = new Matchrecord()
-            print lastUpdate
-            matchrecord.matchrecordName = params.matchrecordName
-            matchrecord.typeMatchrecord = params.typeMatchrecord
-            matchrecord.lastUpdate = lastUpdate
+            print createdDate
+            matchrecord.status = params.status
+            matchrecord.score = params.score
+            matchrecord.createdDate = params.createdDate
             matchrecord.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
@@ -44,9 +44,8 @@ class MatchrecordService {
         try{
             def matchrecord = Matchrecord.get(params.id)
             print matchrecord
-            matchrecord.matchrecordName = params.matchrecordName
-            matchrecord.typeMatchrecord = params.typeMatchrecord
-            matchrecord.lastUpdate = lastUpdate
+            matchrecord.status = params.status
+            matchrecord.createdDate = params.createdDate
             matchrecord.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){

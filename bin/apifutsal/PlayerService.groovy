@@ -13,7 +13,7 @@ class PlayerService {
         try{
             print lastUpdate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Player.listOrderByLastUpdate(order: "desc") : Player.findAllByPlayerNameIlike("%"+params.searchValue+"%",[max: params.int("max"), sort: "playerName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Player.listOrderByLastUpdate(order: "desc") : Player.findAllByPlayerNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "playerName", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
