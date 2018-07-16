@@ -3,20 +3,20 @@ package apifutsal
 import grails.transaction.Transactional
 
 @Transactional
-class MatchrecordService {
+class MatchRecordService {
 
     def result 
-    def lastUpdate = new Date()
+    def createdDate = new Date()
 
     def showData(params) {
         try{
-            print lastUpdate
+            print createdDate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Matchrecord.listOrderByLastUpdate(order: "desc") : Matchrecord.findAllByMatchrecordNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "matchrecordName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? MatchRecord.listOrderByCreatedDate(order: "desc") : MatchRecord.findAllByStatusIlike("%${params.searchValue}%",[max: params.int("max"), sort: "status", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
-            result = [message: "failed get data matchrecord"]
+            result = [message: "failed get data matchRecord"]
         }
 
         return result
@@ -24,17 +24,17 @@ class MatchrecordService {
 
     def saveData(params) {
         try{
-            def matchrecord = new Matchrecord()
-            print lastUpdate
-            matchrecord.matchrecordName = params.matchrecordName
-            matchrecord.typeMatchrecord = params.typeMatchrecord
-            matchrecord.lastUpdate = lastUpdate
-            matchrecord.save(flush: true, failOnError: true)
+            def matchRecord = new MatchRecord()
+            print createdDate
+            matchRecord.status = params.status
+            matchRecord.score = params.score
+            matchRecord.createdDate = params.createdDate
+            matchRecord.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
-            result = [message: "failed save data matchrecord"]
+            result = [message: "failed save data matchRecord"]
         }
 
         return result
@@ -42,17 +42,16 @@ class MatchrecordService {
 
     def updateData(params) {
         try{
-            def matchrecord = Matchrecord.get(params.id)
-            print matchrecord
-            matchrecord.matchrecordName = params.matchrecordName
-            matchrecord.typeMatchrecord = params.typeMatchrecord
-            matchrecord.lastUpdate = lastUpdate
-            matchrecord.save(flush: true, failOnError: true)
+            def matchRecord = MatchRecord.get(params.id)
+            print matchRecord
+            matchRecord.status = params.status
+            matchRecord.createdDate = params.createdDate
+            matchRecord.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
             print e
-            result = [message: "failed update data matchrecord"]
+            result = [message: "failed update data matchRecord"]
         }
 
         return result
@@ -60,13 +59,13 @@ class MatchrecordService {
 
     def deleteData(params) {
         try{
-            def matchrecord = Matchrecord.get(params.id)
-            matchrecord.delete()
+            def matchRecord = MatchRecord.get(params.id)
+            matchRecord.delete()
             result = [message: "success delete"]
         }catch(e){
             print "error deleting data"
             print e
-            result = [message: "failed delete data matchrecord"]
+            result = [message: "failed delete data matchRecord"]
         }
 
         return result

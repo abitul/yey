@@ -6,11 +6,14 @@ class Stadion {
     String adress
     String contactNo
     String guard
-    Integer countFutsalField
+    Integer countfutsalField
     String email
+    String facebook
+    String instagram
+    String twitter
     String facilities
     Date lastUpdate
-    static hasMany = [futsalfield: Futsalfield, sosmeds: Sosmed, reviews: Review, images: Image]
+    static hasMany = [futsalFields: FutsalField, reviewsStadion : ReviewStadion, imagesStadion: ImageStadion]
 
     static constraints = {
         id generator: 'sequence'
@@ -18,8 +21,11 @@ class Stadion {
         adress size: 5..250, blank: false, nullable: false
         contactNo size: 1..15, blank: false, nullable: false
         guard size: 1..50, blank: false, nullable: false
-        countFutsalField size: 1..3, blank: false, nullable: false
+        countfutsalField size: 1..3, blank: false, nullable: false
         email size: 1..50, email: true, blank: false, nullable: false
+        facebook size: 1..50, blank: true, nullable: true
+        instagram size: 1..50, blank: true, nullable: true
+        twitter size: 1..50, blank: true, nullable: true
         facilities size: 1..200, blank: false, nullable: false
     }
 

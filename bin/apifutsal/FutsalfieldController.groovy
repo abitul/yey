@@ -4,34 +4,34 @@ package apifutsal
 import grails.rest.*
 import grails.converters.*
 
-class FutsalfieldController {
+class futsalFieldController {
 
     static responseFormats = ['json']
 
-    FutsalfieldService futsalfieldService
+    FutsalFieldService futsalFieldService
     def responseOfRequest
 
     def show(params) { 
         print params
-        responseOfRequest = futsalfieldService.showData(params)
+        responseOfRequest = futsalFieldService.showData(params)
         respond responseOfRequest
     }
 
     def save(){
         print request.JSON
-        responseOfRequest = futsalfieldService.saveData(request.JSON)
+        responseOfRequest = futsalFieldService.saveData(request.JSON)
         respond responseOfRequest
     }
 
     def update(){
         print request.JSON
-        responseOfRequest = futsalfieldService.updateData(request.JSON)
+        responseOfRequest = futsalFieldService.updateData(request.JSON)
         respond responseOfRequest
     }
 
     def delete(){
         print request.JSON
-        responseOfRequest = futsalfieldService.deleteData(request.JSON)
+        responseOfRequest = futsalFieldService.deleteData(request.JSON)
         respond responseOfRequest
     }
 }

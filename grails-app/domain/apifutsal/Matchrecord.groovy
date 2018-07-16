@@ -1,6 +1,6 @@
 package apifutsal
 
-class Matchrecord {
+class MatchRecord {
 
     String status
     Integer score

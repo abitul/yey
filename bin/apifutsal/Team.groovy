@@ -9,8 +9,13 @@ class Team {
     String imageProfile
     String address
     String email
+    String facebook
+    String instagram
+    String twitter
     boolean isReadyToMatch
     Date lastUpdate 
+
+    static hasMany = [imagesTeam:ImageTeam, players: Player, reviewsTeam: ReviewTeam, bookings: Booking, matchRecords: MatchRecord]
 
     static constraints = {
         id generator: 'sequence'
@@ -21,10 +26,14 @@ class Team {
         imageProfile size: 5..100, blank: true, nullable: true
         address size: 5..250, blank: false, nullable: false
         email size: 1..50, email: true, blank: false, nullable: false
+        facebook size: 1..50, blank: true, nullable: true
+        instagram size: 1..50, blank: true, nullable: true
+        twitter size: 1..50, blank: true, nullable: true
         isReadyToMatch size: 1..10, blank: false, nullable: false
     }
 
     static mapping = {
 
     }
+
 }

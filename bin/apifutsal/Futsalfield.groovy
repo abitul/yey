@@ -1,6 +1,6 @@
 package apifutsal
 
-class Futsalfield {
+class FutsalField {
 
     String name
     String type
@@ -8,6 +8,9 @@ class Futsalfield {
     String endTime
     Long price
     Date lastUpdate
+
+    static belongsTo = [stadion: Stadion]
+    static hasMany = [reviewsFutsalField: ReviewFutsalField, imagesFutsalField: ImageFutsalField]
 
     static constraints = {
         id generator: 'sequence'

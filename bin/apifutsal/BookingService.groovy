@@ -4,14 +4,16 @@ import grails.transaction.Transactional
 
 @Transactional
 class BookingService {
-def result 
-    def lastUpdate = new Date()
+    
+    def result 
+    def createdDate = new Date()
 
+    
     def showData(params) {
         try{
-            print lastUpdate
+            print createdDate
             Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Booking.listOrderByLastUpdate(order: "desc") : Booking.findAllByBookingNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "bookingName", order: "desc", offset: offset])
+            result = params.searchValue == "" ? Booking.listOrderByCreatedDate(order: "desc") : Booking.findAllByBookingCodeIlike("%${params.searchValue}%",[max: params.int("max"), sort: "bookingCode", order: "desc", offset: offset])
         }catch(e){
             print "error gettting data"
             print e
@@ -24,10 +26,12 @@ def result
     def saveData(params) {
         try{
             def booking = new Booking()
-            print lastUpdate
-            booking.bookingName = params.bookingName
-            booking.typeBooking = params.typeBooking
-            booking.lastUpdate = lastUpdate
+            print createdDate
+            booking.startTime = params.startTime
+            booking.endTime = params.endTime
+            booking.status = params.status
+            booking.bookingCode = params.bookingCode
+            booking.createdDate = createdDate
             booking.save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
@@ -43,9 +47,11 @@ def result
         try{
             def booking = Booking.get(params.id)
             print booking
-            booking.bookingName = params.bookingName
-            booking.typeBooking = params.typeBooking
-            booking.lastUpdate = lastUpdate
+            booking.startTime = params.startTime
+            booking.endTime = params.endTime
+            booking.status = params.status
+            booking.bookingCode = params.bookingCode
+            booking.createdDate = createdDate
             booking.save(flush: true, failOnError: true)
             result = [message: "success update data"]
         }catch(e){

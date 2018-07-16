@@ -5,7 +5,9 @@ class Booking {
     Date startTime
     Date endTime
     String status
-    Date lastUpdate
+    String bookingCode
+    Date createdDate
+    static belongsTo = [team: Team]
 
     static constraints = {
         id generator: 'sequence'
