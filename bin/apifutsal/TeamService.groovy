@@ -11,25 +11,44 @@ class TeamService {
     def filePath
     def grailsApplication 
     ImageEncrypter imageEncrypter 
+    RandomGenerator randomGenerator
 
     def showData(params) {
         try{
             println lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            def listData = params.searchValue == "" ? Team.listOrderByLastUpdate(order: "desc") : Team.findAllByTeamNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "teamName", order: "desc", offset: offset])
-            result = []
-            listData.each{res->
-                filePath = grailsApplication.config.properties.imageUrl+"${res.imageProfile}"
-                def objectData = [
-                    id : res.id,
-                    teamName : res.teamName,
-                    countTeam : res.countTeam,
-                    contactNo : res.contactNo,
-                    imageName : res.imageName,
-                    base64Image : imageEncrypter.getBase64File(filePath),
-                    lastUpdate : res.lastUpdate
-                ]
-                result.push(objectData)
+            // Integer offset = (params.int("page")-1) * params.int("max")
+            // def listData = params.searchValue == "" ? Team.listOrderByLastUpdate(order: "desc") : Team.findAllByTeamNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "teamName", order: "desc", offset: offset])
+            // result = []
+            // listData.each{res->
+            //     filePath = grailsApplication.config.properties.imageUrl+"${res.imageProfile}"
+            //     def objectData = [
+            //         id : res.id,
+            //         teamName : res.teamName,
+            //         countTeam : res.countTeam,
+            //         contactNo : res.contactNo,
+            //         imageName : res.imageName,
+            //         base64Image : imageEncrypter.getBase64File(filePath),
+            //         lastUpdate : res.lastUpdate
+            //     ]
+            //     result.push(objectData)
+            // }
+
+            if (params.id){
+                result = Team.get(params.int("id")).each{res->
+                        id: res.id    
+                        address: res.address
+                        contactNo: res.contactNo
+                        countTeam: res.countTeam
+                        email: res.email
+                        facebook: res.facebook
+                        idCard: res.idCard
+                        imageProfile: res.imageProfile
+                        instagram: res.instagram
+                        isReadyToMatch: res.isReadyToMatch
+                        lastUpdate: res.lastUpdate
+                        teamName: res.teamName
+                        twitter: res.twitter
+                }
             }
 
         }catch(e){
@@ -45,7 +64,8 @@ class TeamService {
     def saveData(params) {
         try{
             def team = new Team()
-            print lastUpdate
+            println lastUpdate
+            println randomGenerator.generator( (('A'..'Z')).join(), 6)
             executeData(team,params)
             result = [message: "success insert data", test: lastUpdate.toTimestamp(), dad: lastUpdate ]
         }catch(e){
@@ -91,7 +111,7 @@ class TeamService {
             team.teamName = params.teamName
             team.countTeam = params.countTeam
             team.contactNo = params.contactNo
-            team.imageProfile = params.teamName+lastUpdate.toTimestamp().getTime()+".png"
+            team.imageProfile = "${params.idCard}.png"
             team.address = params.address
             team.email = params.email
             team.facebook = params.facebook
@@ -99,7 +119,9 @@ class TeamService {
             team.twitter = params.twitter
             team.isReadyToMatch = params.isReadyToMatch
             filePath = grailsApplication.config.properties.imageUrl+"${team.imageProfile}"
-            imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            if(params.base64Image){
+                imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            }
             team.lastUpdate = lastUpdate
             team.save(flush: true, failOnError: true)
     }

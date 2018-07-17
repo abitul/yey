@@ -6,7 +6,7 @@ class ImageFutsalField {
     String category
     Date lastUpdate
 
-    static belongsTo = [futsalFields: FutsalField]
+    static belongsTo = [futsalField: FutsalField]
 
     static constraints = {
         id generator: 'sequence'

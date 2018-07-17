@@ -29,7 +29,8 @@ class ImageTeamService {
             image.imageName = params.imageName
             image.category = params.category
             image.lastUpdate = lastUpdate
-            image.save(flush: true, failOnError: true)
+            def team = Team.get(params.teamId)
+            team.addToImagesTeam(image).save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"

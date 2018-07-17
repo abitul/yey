@@ -4,4 +4,5 @@ import apifutsal.*
 beans = {
     mySecurityEventListener(MySecurityEventListener)
     imageEncrypter(ImageEncrypter)
+    randomGenerator(RandomGenerator)
 }
