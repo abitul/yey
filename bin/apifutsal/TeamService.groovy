@@ -15,39 +15,23 @@ class TeamService {
 
     def showData(params) {
         try{
-            println lastUpdate
-            // Integer offset = (params.int("page")-1) * params.int("max")
-            // def listData = params.searchValue == "" ? Team.listOrderByLastUpdate(order: "desc") : Team.findAllByTeamNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "teamName", order: "desc", offset: offset])
-            // result = []
-            // listData.each{res->
-            //     filePath = grailsApplication.config.properties.imageUrl+"${res.imageProfile}"
-            //     def objectData = [
-            //         id : res.id,
-            //         teamName : res.teamName,
-            //         countTeam : res.countTeam,
-            //         contactNo : res.contactNo,
-            //         imageName : res.imageName,
-            //         base64Image : imageEncrypter.getBase64File(filePath),
-            //         lastUpdate : res.lastUpdate
-            //     ]
-            //     result.push(objectData)
-            // }
-
+            println "masuk sini gak"
             if (params.id){
-                result = Team.get(params.int("id")).each{res->
-                        id: res.id    
-                        address: res.address
-                        contactNo: res.contactNo
-                        countTeam: res.countTeam
-                        email: res.email
-                        facebook: res.facebook
-                        idCard: res.idCard
-                        imageProfile: res.imageProfile
-                        instagram: res.instagram
-                        isReadyToMatch: res.isReadyToMatch
-                        lastUpdate: res.lastUpdate
-                        teamName: res.teamName
-                        twitter: res.twitter
+                Team.get(params.id as Integer).each{res->
+                   result = [   
+                        id: res.id,    
+                        address: res.address,
+                        contactNo: res.contactNo,
+                        countTeam: res.countTeam,
+                        email: res.email,
+                        facebook: res.facebook,
+                        idCard: res.idCard,
+                        imageProfile: imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${res.imageProfile}"),
+                        instagram: res.instagram,
+                        isReadyToMatch: res.isReadyToMatch,
+                        lastUpdate: res.lastUpdate,
+                        teamName: res.teamName,
+                        twitter: res.twitter    ]
                 }
             }
 
@@ -66,15 +50,15 @@ class TeamService {
             def team = new Team()
             println lastUpdate
             println randomGenerator.generator( (('A'..'Z')).join(), 6)
-            executeData(team,params)
-            result = [message: "success insert data", test: lastUpdate.toTimestamp(), dad: lastUpdate ]
+            executeData(team, params)
+            result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
             result = [message: "failed save data team ${e}"]
         }
 
-        return result
+//        return result
     }
 
     def updateData(params) {
@@ -107,6 +91,7 @@ class TeamService {
     }
 
     def executeData(team,params){
+            team.userId = params.userId
             team.idCard = params.idCard
             team.teamName = params.teamName
             team.countTeam = params.countTeam
@@ -119,7 +104,7 @@ class TeamService {
             team.twitter = params.twitter
             team.isReadyToMatch = params.isReadyToMatch
             filePath = grailsApplication.config.properties.imageUrl+"${team.imageProfile}"
-            if(params.base64Image){
+            if(params.base64Image && params.base64Image!=""){
                 imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
             }
             team.lastUpdate = lastUpdate

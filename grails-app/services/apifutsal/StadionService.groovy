@@ -8,12 +8,39 @@ class StadionService {
 
     def result 
     def lastUpdate = new Date()
+    def filePath
+    def grailsApplication 
 
+    ImageEncrypter imageEncrypter 
+    
     def showData(params) {
         try{
             print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Stadion.listOrderByLastUpdate(order: "desc") : Stadion.findAllByStadionNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset])
+            if (params.id){
+                def stadion = Stadion.get(params.id as Integer)
+                result = [   
+                            stadionName : stadion.stadionName,
+                            idCard : stadion.idCard,
+                            province : stadion.province,
+                            districs : stadion.districs,
+                            subDistrics : stadion.subDistrics,
+                            kelurahan : stadion.kelurahan,
+                            zipCode : stadion.zipCode,
+                            adress : stadion.adress,
+                            contactNo : stadion.contactNo,
+                            guard : stadion.guard,
+                            imageProfile : imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${stadion.imageProfile}"),
+                            countfutsalField :  stadion.countfutsalField,
+                            email : stadion.email,
+                            facebook : stadion.facebook,
+                            instagram : stadion.instagram,
+                            twitter : stadion.twitter,
+                            facilities : stadion.facilities    ]
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? Stadion.listOrderByLastUpdate(order: "desc") : Stadion.findAllByStadionNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset])
+            }
+            
         }catch(e){
             print "error gettting data"
             print e
@@ -26,13 +53,7 @@ class StadionService {
     def saveData(params) {
         try{
             def stadion = new Stadion()
-            print lastUpdate
-            stadion.stadionName = params.stadionName
-            stadion.location = params.location
-            stadion.contactNo = params.contactNo
-            stadion.owner = params.owner
-            stadion.lastUpdate = lastUpdate
-            stadion.save(flush: true, failOnError: true)
+            executeData(stadion,params)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
@@ -46,13 +67,7 @@ class StadionService {
     def updateData(params) {
         try{
             def stadion = Stadion.get(params.id)
-            print stadion
-            stadion.stadionName = params.stadionName
-            stadion.location = params.location
-            stadion.contactNo = params.contactNo
-            stadion.owner = params.owner
-            stadion.lastUpdate = lastUpdate
-            stadion.save(flush: true, failOnError: true)
+            executeData(stadion,params)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
@@ -75,6 +90,32 @@ class StadionService {
         }
 
         return result
+    }
+
+    def executeData(stadion,params){
+            stadion.stadionName = params.stadionName
+            stadion.idCard = params.idCard
+            stadion.province = params.province
+            stadion.districs = params.districs
+            stadion.subDistrics = params.subDistrics
+            stadion.kelurahan = params.kelurahan
+            stadion.zipCode = params.zipCode
+            stadion.adress = params.adress
+            stadion.contactNo = params.contactNo
+            stadion.guard = params.guard
+            stadion.imageProfile = "${params.idCard}.png"
+            stadion.countfutsalField =  params.countfutsalField
+            stadion.email = params.email
+            stadion.facebook = params.facebook
+            stadion.instagram = params.instagram
+            stadion.twitter = params.twitter
+            stadion.facilities = params.facilities
+            filePath = grailsApplication.config.properties.imageUrl+"${stadion.imageProfile}"
+            if(params.base64Image && params.base64Image!=""){
+                imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            }
+            stadion.lastUpdate = lastUpdate
+            stadion.save(flush: true, failOnError: true)
     }
 }
 

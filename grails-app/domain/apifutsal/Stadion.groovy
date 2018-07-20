@@ -3,9 +3,16 @@ package apifutsal
 class Stadion {
 
     String stadionName
+    String idCard
+    String province
+    String districs
+    String subDistrics
+    String kelurahan
+    String zipCode
     String adress
     String contactNo
     String guard
+    String imageProfile
     Integer countfutsalField
     String email
     String facebook
@@ -18,6 +25,7 @@ class Stadion {
     static constraints = {
         id generator: 'sequence'
         stadionName size: 1..100, blank: false, nullable: false
+        idCard size: 5..20, blank: false, nullable: false, unique: true
         adress size: 5..250, blank: false, nullable: false
         contactNo size: 1..15, blank: false, nullable: false
         guard size: 1..50, blank: false, nullable: false

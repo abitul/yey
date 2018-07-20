@@ -8,8 +8,9 @@ class BootStrap {
         Role roleUser = new Role(authority: 'ROLE_ADMIN').save(flush: true)
 
         User user = new User(
-            username: 'abit',
+            username: 'superadmin',
             password: springSecurityService.encodePassword('p@ssw0rd') ,
+            userType: 'USER_ADMIN',
             enabled: true,
             accountExpired: false,
             accountLocked: false,

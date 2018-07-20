@@ -15,11 +15,9 @@ grails.plugin.springsecurity.rest.token.validation.endpointUrl = "/api/validate"
 // grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = "username"
 
 grails.plugin.springsecurity.filterChain.chainMap = [
-    //Stateless chain
-    [ pattern: '/api/**', filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'],
-
-    //Traditional chain
-    [ pattern: '/**', filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
+    [pattern: '/api/**',        filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'],
+    [pattern: '/**',            filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'],
+    [pattern: '/register/**',   filters: 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor']
 ]
 
 // Added by the Spring Security Core plugin:
@@ -39,7 +37,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     [pattern: '/**/images/**',   access: ['permitAll']],
     [pattern: '/**/favicon.ico', access: ['permitAll']],
     [pattern: '/api/login',      access: ['permitAll']],
-	[pattern: '/api/validate',   access: ['isFullyAuthenticated()']],
+    [pattern: '/register/**',    access: ['permitAll']],
+    [pattern: '/api/validate',   access: ['isFullyAuthenticated()']],
     [pattern: '/api/logout',     access: ['isFullyAuthenticated()']],
     [pattern: '/api/**',         access: ['isFullyAuthenticated()']],
     [pattern: '/**',             access: ['isFullyAuthenticated()']]
@@ -51,6 +50,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/css/**',      filters: 'none'],
 	[pattern: '/**/images/**',   filters: 'none'],
 	[pattern: '/**/favicon.ico', filters: 'none'],
+    [pattern: '/register/**',    filters: 'none'],
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
 

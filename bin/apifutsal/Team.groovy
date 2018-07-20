@@ -2,6 +2,7 @@ package apifutsal
 
 class Team {
 
+    String userId
     String idCard
     String teamName
     Integer countTeam

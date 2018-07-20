@@ -15,23 +15,22 @@ class TeamService {
 
     def showData(params) {
         try{
-            println lastUpdate
             if (params.id){
-                Team.get(params.int("id")).each{res->
-                   result = [   id: res.id,    
-                        address: res.address,
-                        contactNo: res.contactNo,
-                        countTeam: res.countTeam,
-                        email: res.email,
-                        facebook: res.facebook,
-                        idCard: res.idCard,
-                        imageProfile: imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${res.imageProfile}"),
-                        instagram: res.instagram,
-                        isReadyToMatch: res.isReadyToMatch,
-                        lastUpdate: res.lastUpdate,
-                        teamName: res.teamName,
-                        twitter: res.twitter    ]
-                }
+                def team = Team.get(params.id as Integer)
+                result = [   
+                        id: team.id,    
+                        address: team.address,
+                        contactNo: team.contactNo,
+                        countTeam: team.countTeam,
+                        email: team.email,
+                        facebook: team.facebook,
+                        idCard: team.idCard,
+                        imageProfile: imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${team.imageProfile}"),
+                        instagram: team.instagram,
+                        isReadyToMatch: team.isReadyToMatch,
+                        lastUpdate: team.lastUpdate,
+                        teamName: team.teamName,
+                        twitter: team.twitter    ]
             }
 
         }catch(e){
@@ -49,17 +48,15 @@ class TeamService {
             def team = new Team()
             println lastUpdate
             println randomGenerator.generator( (('A'..'Z')).join(), 6)
-            executeData(team,params)
-            def getTeam = team.findByIdCard("${params.idCard}")
-            println getTeam
-            result = [message: "success insert data", test: lastUpdate.toTimestamp(), dad: lastUpdate ]
+            executeData(team, params)
+            result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
             print e
             result = [message: "failed save data team ${e}"]
         }
 
-        return result
+       return result
     }
 
     def updateData(params) {
@@ -92,6 +89,7 @@ class TeamService {
     }
 
     def executeData(team,params){
+            team.userId = params.userId
             team.idCard = params.idCard
             team.teamName = params.teamName
             team.countTeam = params.countTeam
