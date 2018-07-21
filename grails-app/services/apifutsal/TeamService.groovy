@@ -18,14 +18,16 @@ class TeamService {
             if (params.id){
                 def team = Team.get(params.id as Integer)
                 result = [   
-                        id: team.id,    
+                        id: team.id,
+                        userId: team.userId,    
                         address: team.address,
                         contactNo: team.contactNo,
                         countTeam: team.countTeam,
                         email: team.email,
                         facebook: team.facebook,
                         idCard: team.idCard,
-                        imageProfile: imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${team.imageProfile}"),
+                        base64Image: imageEncrypter.getBase64File(grailsApplication.config.properties.profileTeamPath+"\\${team.imageProfile}"),
+                        imageProfile: team.imageProfile,
                         instagram: team.instagram,
                         isReadyToMatch: team.isReadyToMatch,
                         lastUpdate: team.lastUpdate,
@@ -94,14 +96,14 @@ class TeamService {
             team.teamName = params.teamName
             team.countTeam = params.countTeam
             team.contactNo = params.contactNo
-            team.imageProfile = "${params.idCard}.png"
+            team.imageProfile = params.imageProfile
             team.address = params.address
             team.email = params.email
             team.facebook = params.facebook
             team.instagram = params.instagram
             team.twitter = params.twitter
             team.isReadyToMatch = params.isReadyToMatch
-            filePath = grailsApplication.config.properties.imageUrl+"${team.imageProfile}"
+            filePath = grailsApplication.config.properties.profileTeamPath+"\\${params.imageProfile}"
             if(params.base64Image && params.base64Image!=""){
                 imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
             }

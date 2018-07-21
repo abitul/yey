@@ -8,6 +8,7 @@ class RegisterService {
     def result 
     def lastUpdate = new Date()
     TeamService teamService
+    StadionService stadionService
     def springSecurityService
 
     def saveData(params) {
@@ -28,11 +29,14 @@ class RegisterService {
             UserRole.create(user, roleUser)
             def userId = User.findByUsername("${params.username}").id
             params.userId = userId
-            result = teamService.saveData(params)
+            if (params.userType == "USER_TEAM"){
+                result = teamService.saveData(params)
+            }else if(params.userType == "USER_STADION"){
+                result = stadionService.saveData(params)
+            }
         }catch(e){
             print "error saving data"
             print e
-            return result = [message: "failed save data team ${e}"]
         }
     }
 }

@@ -26,6 +26,11 @@ class Stadion {
         id generator: 'sequence'
         stadionName size: 1..100, blank: false, nullable: false
         idCard size: 5..20, blank: false, nullable: false, unique: true
+        province size: 1..50, blank: false, nullable: false
+        districs size: 1..50, blank: false, nullable: false
+        subDistrics size: 1..50, blank: false, nullable: false
+        kelurahan size: 1..50, blank: false, nullable: false
+        zipCode size: 1..50, blank: false, nullable: false
         adress size: 5..250, blank: false, nullable: false
         contactNo size: 1..15, blank: false, nullable: false
         guard size: 1..50, blank: false, nullable: false

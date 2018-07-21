@@ -11,8 +11,14 @@ class ReviewTeamService {
     def showData(params) {
         try{
             print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? ReviewTeam.listOrderByLastUpdate(order: "desc") : ReviewTeam.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
+            if(params.teamId){
+                def team = Team.get(params.teamId as Integer)
+                result = ReviewTeam.findAllByTeam(team)
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? ReviewTeam.listOrderByLastUpdate(order: "desc") : ReviewTeam.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
+            }
+            
         }catch(e){
             print "error gettting data"
             print e
@@ -31,7 +37,8 @@ class ReviewTeamService {
             reviewTeam.star = params.star
             reviewTeam.idReviewer = params.idReviewer
             reviewTeam.lastUpdate = lastUpdate
-            reviewTeam.save(flush: true, failOnError: true)
+            def team = Team.get(params.teamId)
+            team.addToReviewsTeam(reviewTeam).save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"

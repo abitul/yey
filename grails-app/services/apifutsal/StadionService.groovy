@@ -29,7 +29,8 @@ class StadionService {
                             adress : stadion.adress,
                             contactNo : stadion.contactNo,
                             guard : stadion.guard,
-                            imageProfile : imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${stadion.imageProfile}"),
+                            imageProfile : stadion.imageProfile,
+                            base64Image : imageEncrypter.getBase64File(grailsApplication.config.properties.profileStadionPath+"\\${stadion.imageProfile}"),
                             countfutsalField :  stadion.countfutsalField,
                             email : stadion.email,
                             facebook : stadion.facebook,
@@ -38,7 +39,7 @@ class StadionService {
                             facilities : stadion.facilities    ]
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? Stadion.listOrderByLastUpdate(order: "desc") : Stadion.findAllByStadionNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset])
+                result = params.searchValue == "" ? Stadion.listOrderByLastUpdate(order: "desc") : Stadion["findAllBy${params.searchBy}Ilike"]("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset])
             }
             
         }catch(e){
@@ -103,14 +104,14 @@ class StadionService {
             stadion.adress = params.adress
             stadion.contactNo = params.contactNo
             stadion.guard = params.guard
-            stadion.imageProfile = "${params.idCard}.png"
+            stadion.imageProfile = params.imageProfile
             stadion.countfutsalField =  params.countfutsalField
             stadion.email = params.email
             stadion.facebook = params.facebook
             stadion.instagram = params.instagram
             stadion.twitter = params.twitter
             stadion.facilities = params.facilities
-            filePath = grailsApplication.config.properties.imageUrl+"${stadion.imageProfile}"
+            filePath = grailsApplication.config.properties.profileStadionPath+"\\${params.imageProfile}"
             if(params.base64Image && params.base64Image!=""){
                 imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
             }

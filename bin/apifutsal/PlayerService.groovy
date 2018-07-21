@@ -12,8 +12,13 @@ class PlayerService {
     def showData(params) {
         try{
             print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Player.listOrderByLastUpdate(order: "desc") : Player.findAllByPlayerNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "playerName", order: "desc", offset: offset])
+            if(params.teamId){
+                def team = Team.get(params.teamId as Integer)
+                result = Player.findAllByTeam(team)
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? Player.listOrderByLastUpdate(order: "desc") : Player.findAllByPlayerNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "playerName", order: "desc", offset: offset])
+            }
         }catch(e){
             print "error gettting data"
             print e
@@ -30,8 +35,13 @@ class PlayerService {
             player.playerName = params.playerName
             player.age = params.age
             player.playerPosition = params.playerPosition
+            player.contactNo = params.contactNo
+            player.facebook = params.facebook
+            player.instagram = params.instagram
+            player.twitter = params.twitter
             player.lastUpdate = lastUpdate
-            player.save(flush: true, failOnError: true)
+            def team = Team.get(params.teamId)
+            team.addToPlayers(player).save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
@@ -49,6 +59,10 @@ class PlayerService {
             player.playerName = params.playerName
             player.age = params.age
             player.playerPosition = params.playerPosition
+            player.contactNo = params.contactNo
+            player.facebook = params.facebook
+            player.instagram = params.instagram
+            player.twitter = params.twitter
             player.lastUpdate = lastUpdate
             player.save(flush: true, failOnError: true)
             result = [message: "success update data"]

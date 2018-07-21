@@ -7,12 +7,31 @@ class ImageTeamService {
 
     def result 
     def lastUpdate = new Date()
+    def filePath
+    def grailsApplication 
+    ImageEncrypter imageEncrypter 
 
     def showData(params) {
         try{
-            print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? ImageTeam.listOrderByLastUpdate(order: "desc") : ImageTeam.findAllByImageTeamNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "imageName", order: "desc", offset: offset])
+            println lastUpdate
+            if(params.teamId){
+                def team = Team.get(params.teamId as Integer)
+                def listData = ImageTeam.findAllByTeam(team)
+                print listData
+                result = []
+                listData.each{res->
+                    def objectData = [ 
+                                        id : res.id,
+                                        category : res.category,
+                                        imageName : res.imageName,
+                                        base64Image : imageEncrypter.getBase64File(grailsApplication.config.properties.imageTeamPath+"\\${res.imageName}"),
+                                        teamId : res.teamId ]
+                    result.push(objectData)
+                }
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? ImageTeam.listOrderByLastUpdate(order: "desc") : ImageTeam.findAllByImageNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "imageName", order: "desc", offset: offset])
+            } 
         }catch(e){
             print "error gettting data"
             print e
@@ -27,6 +46,10 @@ class ImageTeamService {
             def image = new ImageTeam()
             print lastUpdate
             image.imageName = params.imageName
+            filePath = grailsApplication.config.properties.imageTeamPath+"\\${params.imageName}"
+            if(params.base64Image && params.base64Image!=""){
+                imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            }
             image.category = params.category
             image.lastUpdate = lastUpdate
             def team = Team.get(params.teamId)
@@ -46,6 +69,10 @@ class ImageTeamService {
             def image = ImageTeam.get(params.id)
             print image
             image.imageName = params.imageName
+            filePath = grailsApplication.config.properties.imageTeamPath+"\\${params.imageName}"
+            if(params.base64Image && params.base64Image!=""){
+                imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            }
             image.category = params.category
             image.lastUpdate = lastUpdate
             image.save(flush: true, failOnError: true)

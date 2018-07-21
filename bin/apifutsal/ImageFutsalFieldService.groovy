@@ -7,12 +7,31 @@ class ImageFutsalFieldService {
 
     def result 
     def lastUpdate = new Date()
+    def filePath
+    def grailsApplication 
+    ImageEncrypter imageEncrypter 
 
     def showData(params) {
         try{
-            print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? ImageFutsal.listOrderByLastUpdate(order: "desc") : ImageFutsal.findAllByImageFutsalNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "imageName", order: "desc", offset: offset])
+            println lastUpdate
+            if(params.futsalFieldId){
+                def futsalField = FutsalField.get(params.futsalFieldId as Integer)
+                def listData = ImageFutsalField.findAllByFutsalField(futsalField)
+                print listData
+                result = []
+                listData.each{res->
+                    def objectData = [ 
+                                        id : res.id,
+                                        category : res.category,
+                                        imageName : res.imageName,
+                                        base64Image : imageEncrypter.getBase64File(grailsApplication.config.properties.imageFutsalFieldPath+"\\${res.imageName}"),
+                                        futsalFieldId : res.futsalFieldId ]
+                    result.push(objectData)
+                }
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? ImageFutsalField.listOrderByLastUpdate(order: "desc") : ImageFutsalField.findAllByImageNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "imageName", order: "desc", offset: offset])
+            } 
         }catch(e){
             print "error gettting data"
             print e
@@ -27,9 +46,14 @@ class ImageFutsalFieldService {
             def image = new ImageFutsalField()
             print lastUpdate
             image.imageName = params.imageName
+            filePath = grailsApplication.config.properties.imageFutsalFieldPath+"\\${params.imageName}"
+            if(params.base64Image && params.base64Image!=""){
+                imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            }
             image.category = params.category
             image.lastUpdate = lastUpdate
-            image.save(flush: true, failOnError: true)
+            def futsalField = FutsalField.get(params.futsalFieldId)
+            futsalField.addToImagesFutsalField(image).save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
@@ -45,6 +69,10 @@ class ImageFutsalFieldService {
             def image = ImageFutsalField.get(params.id)
             print image
             image.imageName = params.imageName
+            filePath = grailsApplication.config.properties.imageFutsalFieldPath+"\\${params.imageName}"
+            if(params.base64Image && params.base64Image!=""){
+                imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
+            }
             image.category = params.category
             image.lastUpdate = lastUpdate
             image.save(flush: true, failOnError: true)

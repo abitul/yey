@@ -11,8 +11,14 @@ class ReviewStadionService {
     def showData(params) {
         try{
             print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? ReviewStadion.listOrderByLastUpdate(order: "desc") : ReviewStadion.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
+            if(params.stadionId){
+                def stadion = Stadion.get(params.stadionId as Integer)
+                result = ReviewStadion.findAllByStadion(stadion)
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? ReviewStadion.listOrderByLastUpdate(order: "desc") : ReviewStadion.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
+            }
+            
         }catch(e){
             print "error gettting data"
             print e
@@ -31,7 +37,8 @@ class ReviewStadionService {
             reviewStadion.star = params.star
             reviewStadion.idReviewer = params.idReviewer
             reviewStadion.lastUpdate = lastUpdate
-            reviewStadion.save(flush: true, failOnError: true)
+            def stadion = Stadion.get(params.stadionId)
+            stadion.addToReviewsStadion(reviewStadion).save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"

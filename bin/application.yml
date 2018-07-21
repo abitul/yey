@@ -29,7 +29,11 @@ spring:
 # Additional Properties Config #
 
 properties:
-    imageUrl: "D:\\New War\\Futsal Project\\ImageDir\\"
+    imageFutsalFieldPath: "D:\\New War\\Futsal Project\\ImageDir\\imageFutsalField"
+    imageStadionPath: "D:\\New War\\Futsal Project\\ImageDir\\imageStadion"
+    imageTeamPath: "D:\\New War\\Futsal Project\\ImageDir\\imageTeam"
+    profileStadionPath: "D:\\New War\\Futsal Project\\ImageDir\\profileStadion"
+    profileTeamPath: "D:\\New War\\Futsal Project\\ImageDir\\profileTeam"
 
 # Additional Properties Config #
 
@@ -113,7 +117,7 @@ dataSource:
 environments:
     development:
         dataSource:
-            dbCreate: create-drop
+            dbCreate: update
             url: jdbc:postgresql://localhost:5432/dbfutsaldev
     test:
         dataSource:

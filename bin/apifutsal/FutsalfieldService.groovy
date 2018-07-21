@@ -11,8 +11,26 @@ class FutsalFieldService {
     def showData(params) {
         try{
             print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? FutsalField.listOrderByLastUpdate(order: "desc") : FutsalField.findAllByFutsalFieldNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "futsalFieldName", order: "desc", offset: offset])
+            if(params.stadionId){
+                def stadion = Stadion.get(params.stadionId as Integer)
+                def listData = FutsalField.findAllByStadion(stadion)
+                result = []
+                listData.each{res->
+                        def objectData = [
+                                            id: res.id,
+                                            name: res.name,
+                                            type: res.type,
+                                            startTime: res.startTime,
+                                            endTime: res.endTime,
+                                            price: res.price,
+                                            lastUpdate: res.lastUpdate
+                                                                        ]
+                        result.push(objectData)
+                }
+            }else{
+                Integer offset = (params.int("page")-1) * params.int("max")
+                result = params.searchValue == "" ? FutsalField.listOrderByLastUpdate(order: "desc") : FutsalField.findAllByNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "name", order: "desc", offset: offset])
+            }
         }catch(e){
             print "error gettting data"
             print e
@@ -21,15 +39,19 @@ class FutsalFieldService {
 
         return result
     }
-
+    
     def saveData(params) {
         try{
             def futsalField = new FutsalField()
             print lastUpdate
-            futsalField.futsalFieldName = params.futsalFieldName
-            futsalField.typefutsalField = params.typefutsalField
+            futsalField.name = params.name
+            futsalField.type = params.type
+            futsalField.startTime = params.startTime
+            futsalField.endTime = params.endTime
+            futsalField.price = params.price
             futsalField.lastUpdate = lastUpdate
-            futsalField.save(flush: true, failOnError: true)
+            def stadion = Stadion.get(params.stadionId)
+            stadion.addToFutsalFields(futsalField).save(flush: true, failOnError: true)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
@@ -44,8 +66,11 @@ class FutsalFieldService {
         try{
             def futsalField = FutsalField.get(params.id)
             print futsalField
-            futsalField.futsalFieldName = params.futsalFieldName
-            futsalField.typefutsalField = params.typefutsalField
+            futsalField.name = params.name
+            futsalField.type = params.type
+            futsalField.startTime = params.startTime
+            futsalField.endTime = params.endTime
+            futsalField.price = params.price
             futsalField.lastUpdate = lastUpdate
             futsalField.save(flush: true, failOnError: true)
             result = [message: "success update data"]

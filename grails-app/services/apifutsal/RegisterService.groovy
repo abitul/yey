@@ -8,6 +8,7 @@ class RegisterService {
     def result 
     def lastUpdate = new Date()
     TeamService teamService
+    StadionService stadionService
     def springSecurityService
 
     def saveData(params) {
@@ -30,8 +31,8 @@ class RegisterService {
             params.userId = userId
             if (params.userType == "USER_TEAM"){
                 result = teamService.saveData(params)
-            }else{
-                
+            }else if(params.userType == "USER_STADION"){
+                result = stadionService.saveData(params)
             }
         }catch(e){
             print "error saving data"

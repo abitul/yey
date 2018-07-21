@@ -15,24 +15,24 @@ class TeamService {
 
     def showData(params) {
         try{
-            println "masuk sini gak"
             if (params.id){
-                Team.get(params.id as Integer).each{res->
-                   result = [   
-                        id: res.id,    
-                        address: res.address,
-                        contactNo: res.contactNo,
-                        countTeam: res.countTeam,
-                        email: res.email,
-                        facebook: res.facebook,
-                        idCard: res.idCard,
-                        imageProfile: imageEncrypter.getBase64File(grailsApplication.config.properties.imageUrl+"${res.imageProfile}"),
-                        instagram: res.instagram,
-                        isReadyToMatch: res.isReadyToMatch,
-                        lastUpdate: res.lastUpdate,
-                        teamName: res.teamName,
-                        twitter: res.twitter    ]
-                }
+                def team = Team.get(params.id as Integer)
+                result = [   
+                        id: team.id,
+                        userId: team.userId,    
+                        address: team.address,
+                        contactNo: team.contactNo,
+                        countTeam: team.countTeam,
+                        email: team.email,
+                        facebook: team.facebook,
+                        idCard: team.idCard,
+                        base64Image: imageEncrypter.getBase64File(grailsApplication.config.properties.profileTeamPath+"\\${team.imageProfile}"),
+                        imageProfile: team.imageProfile,
+                        instagram: team.instagram,
+                        isReadyToMatch: team.isReadyToMatch,
+                        lastUpdate: team.lastUpdate,
+                        teamName: team.teamName,
+                        twitter: team.twitter    ]
             }
 
         }catch(e){
@@ -58,7 +58,7 @@ class TeamService {
             result = [message: "failed save data team ${e}"]
         }
 
-//        return result
+       return result
     }
 
     def updateData(params) {
@@ -96,14 +96,14 @@ class TeamService {
             team.teamName = params.teamName
             team.countTeam = params.countTeam
             team.contactNo = params.contactNo
-            team.imageProfile = "${params.idCard}.png"
+            team.imageProfile = params.imageProfile
             team.address = params.address
             team.email = params.email
             team.facebook = params.facebook
             team.instagram = params.instagram
             team.twitter = params.twitter
             team.isReadyToMatch = params.isReadyToMatch
-            filePath = grailsApplication.config.properties.imageUrl+"${team.imageProfile}"
+            filePath = grailsApplication.config.properties.profileTeamPath+"\\${params.imageProfile}"
             if(params.base64Image && params.base64Image!=""){
                 imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
             }

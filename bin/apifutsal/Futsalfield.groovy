@@ -6,11 +6,11 @@ class FutsalField {
     String type
     String startTime
     String endTime
-    Long price
+    Double price
     Date lastUpdate
 
     static belongsTo = [stadion: Stadion]
-    // static hasMany = [reviewsFutsalField: ReviewFutsalField, imagesFutsalField: ImageFutsalField]
+    static hasMany = [reviewsFutsalField: ReviewFutsalField, imagesFutsalField: ImageFutsalField]
 
     static constraints = {
         id generator: 'sequence'

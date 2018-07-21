@@ -10,14 +10,11 @@ grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
 grails.plugin.springsecurity.rest.logout.endpointUrl = "/api/logout"
 grails.plugin.springsecurity.rest.token.validation.active = true
 grails.plugin.springsecurity.rest.token.validation.endpointUrl = "/api/validate"
-// grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = "apifutsal.AuthenticationToken"
-// grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName = "tokenValue"
-// grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = "username"
 
 grails.plugin.springsecurity.filterChain.chainMap = [
-    [pattern: '/api/**',        filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'],
-    [pattern: '/**',            filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'],
-    [pattern: '/register/**',   filters: 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor']
+    [pattern: '/api/**',       filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'],
+    [pattern: '/**',           filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'],
+    [pattern: '/register/**',  filters: 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor']
 ]
 
 // Added by the Spring Security Core plugin:
