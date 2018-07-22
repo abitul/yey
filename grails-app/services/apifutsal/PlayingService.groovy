@@ -11,8 +11,35 @@ class PlayingService {
     def showData(params) {
         try{
             print lastUpdate
-            Integer offset = (params.int("page")-1) * params.int("max")
-            result = params.searchValue == "" ? Playing.listOrderByLastUpdate(order: "desc") : Playing.findAllByTeamVersusIlike("%${params.searchValue}%",[max: params.int("max"), sort: "teamVersus", order: "desc", offset: offset])
+            result = []
+            def startTime =  Date.parse("yyyy-MM-dd H:mm:s", params.startTime)
+            def endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
+            def listData = params.isBattle.toBoolean() ? Booking.findAllByVersusTeamIdIsNotNullAndCreatedDateBetween(startTime, endTime) : Booking.findAllByVersusTeamIdIsNullAndCreatedDateBetween(startTime, endTime)
+            println listData
+            listData.each{res->
+                    def stadion = Stadion.get(res.stadionId)
+                    def futsalField = FutsalField.get(res.futsalFieldId)
+                    def team1 = Team.get(res.teamId)
+                    def team2 = res.versusTeamId ? Team.get(res.versusTeamId) : null
+
+                    def objectData = [
+                        bookingId: res.id,
+                        isBattle : params.isBattle.toBoolean(),
+                        team1Id: res.teamId,
+                        team1Name: team1.teamName,
+                        team2Id: res.versusTeamId ? res.versusTeamId : null,
+                        team2Name: res.versusTeamId ? team2.teamName : null,
+                        province: stadion.province,
+                        districs: stadion.districs,
+                        subDistrics: stadion.subDistrics,
+                        kelurahan: stadion.kelurahan,
+                        zipCode: stadion.zipCode,
+                        futsalFieldId: res.futsalFieldId,
+                        futsalFieldName: futsalField.name
+                    ]
+
+                    result.push(objectData)
+            }
         }catch(e){
             print "error gettting data"
             print e

@@ -4,6 +4,8 @@ class MatchRecord {
 
     String status
     Integer score
+    Integer versusTeamId
+    Integer versusTeamScore
     Date createdDate
     static belongsTo = [team: Team]
 
