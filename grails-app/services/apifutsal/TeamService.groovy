@@ -10,14 +10,19 @@ class TeamService {
     def lastUpdate = new Date()
     def filePath
     def grailsApplication 
+    def team
     ImageEncrypter imageEncrypter 
     RandomGenerator randomGenerator
+    SendemailService sendemailService
+    ErrorHandler errorHandler
 
     def showData(params) {
+              
         try{
             if (params.id){
-                def team = Team.get(params.id as Integer)
-                result = [   
+                team = Team.get(params.id as Integer)
+                result = [
+                    data :[
                         id: team.id,
                         userId: team.userId,    
                         address: team.address,
@@ -32,65 +37,71 @@ class TeamService {
                         isReadyToMatch: team.isReadyToMatch,
                         lastUpdate: team.lastUpdate,
                         teamName: team.teamName,
-                        twitter: team.twitter    ]
+                        twitter: team.twitter    
+                    ],
+                    message : "success get data",
+                    isSuccessFull : true,                    
+                ]
             }
-
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data team"]
+            errorChecking(null, "ERROR_GET_DATA", "Failed get Data Team", e)
         }
 
         return result
+
     }
 
 
     def saveData(params) {
+
         try{
-            def team = new Team()
-            println lastUpdate
-            println randomGenerator.generator( (('A'..'Z')).join(), 6)
-            executeData(team, params)
-            result = [message: "success insert data"]
+            team = new Team()
+            saveToDB(team, params)
+            def emailData = [
+                to: params.email,
+                subject: "Register Success",
+                body: "Terima Kasih telah register di futsalo",
+                userId: params.userId
+            ]
+            sendemailService.sendDirectEmail(emailData)
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data team ${e}"]
+            errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e)
         }
 
        return result
+
     }
 
     def updateData(params) {
+        
         try{
-            def team = Team.get(params.id)
-            print team
-            executeData(team,params)
-            result = [message: "success update data"]
+            team = Team.get(params.id)
+            saveToDB(team,params)
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data team"]
+            errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data team", e)
         }
 
         return result
     }
 
     def deleteData(params) {
+
         try{
-            def team = Team.get(params.id)
+            team = Team.get(params.id)
             team.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data team"]
+            errorChecking(null, "ERROR_UPDATE_DATA", "Failed delete data team", e)
         }
 
         return result
+
     }
 
-    def executeData(team,params){
+    def saveToDB(team,params){
+
             team.userId = params.userId
             team.idCard = params.idCard
             team.teamName = params.teamName
@@ -108,7 +119,30 @@ class TeamService {
                 imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
             }
             team.lastUpdate = lastUpdate
+            team.validate()
             team.save(flush: true, failOnError: true)
+
+    }
+
+    def errorChecking(team, errorTag, errorMessage, e){
+
+        errorHandler = new ErrorHandler()
+        if (team) {
+            if (team.errors.hasFieldErrors("idCard")) {
+                errorHandler.setError("IDCARD_NOT_UNIQUE", "Please change value in idcard "+team.errors.getFieldError("idCard").rejectedValue)
+            }
+
+            if (team.errors.hasFieldErrors("email")) {
+                errorHandler.setError("EMAIL_NOT_VALID", "Please change value in email "+team.errors.getFieldError("email").rejectedValue)
+            }
+
+            result = [errors: errorHandler.getListError(), isSuccessFull: false]
+        }else{
+            println e
+            errorHandler.setError("${errorTag}", "${errorMessage} ${e}")
+            result = [errors: errorHandler.getListError(), isSuccessFull: false]
+        }
+        
     }
 
 }

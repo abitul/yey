@@ -13,7 +13,7 @@ class MatchRecordService {
             print createdDate
             if(params.teamId){
                 def team = Team.get(params.teamId as Integer)
-                result = Booking.findAllByTeam(team)
+                result = MatchRecord.findAllByTeam(team)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
                 result = params.searchValue == "" ? MatchRecord.listOrderByCreatedDate(order: "desc") : MatchRecord.findAllByStatusIlike("%${params.searchValue}%",[max: params.int("max"), sort: "status", order: "desc", offset: offset])

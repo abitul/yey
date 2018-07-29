@@ -54,7 +54,7 @@ class StadionService {
     def saveData(params) {
         try{
             def stadion = new Stadion()
-            executeData(stadion,params)
+            saveToDB(stadion,params)
             result = [message: "success insert data"]
         }catch(e){
             print "error saving data"
@@ -68,7 +68,7 @@ class StadionService {
     def updateData(params) {
         try{
             def stadion = Stadion.get(params.id)
-            executeData(stadion,params)
+            saveToDB(stadion,params)
             result = [message: "success update data"]
         }catch(e){
             print "error updating data"
@@ -93,7 +93,7 @@ class StadionService {
         return result
     }
 
-    def executeData(stadion,params){
+    def saveToDB(stadion,params){
             stadion.stadionName = params.stadionName
             stadion.idCard = params.idCard
             stadion.province = params.province

@@ -6,4 +6,5 @@ beans = {
     randomGenerator(RandomGenerator)
     mySecurityEventListener(MySecurityEventListener)
     accessTokenJsonRenderer(FutsalAppRestAuthTokenJsonRenderer)
+    errorHandler(ErrorHandler)
 }
