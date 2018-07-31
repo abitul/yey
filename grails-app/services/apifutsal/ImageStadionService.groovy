@@ -11,6 +11,7 @@ class ImageStadionService {
     def grailsApplication 
     def imageStadion
     ImageEncrypter imageEncrypter 
+    ErrorHandler errorHandler
 
     def showData(params) {
         try{

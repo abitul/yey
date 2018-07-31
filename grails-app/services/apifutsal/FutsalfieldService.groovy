@@ -8,6 +8,7 @@ class FutsalFieldService {
     def result 
     def lastUpdate = new Date()
     def futsalField
+    ErrorHandler errorHandler
 
     def showData(params) {
 

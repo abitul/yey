@@ -10,6 +10,7 @@ class RegisterService {
     TeamService teamService
     StadionService stadionService
     def springSecurityService
+    ErrorHandler errorHandler
 
     def saveData(params) {
 

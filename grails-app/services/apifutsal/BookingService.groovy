@@ -9,7 +9,8 @@ class BookingService {
     def createdDate = new Date()
     def booking
     RandomGenerator randomGenerator
-    
+    ErrorHandler errorHandler
+
     def showData(params) {
 
         try{

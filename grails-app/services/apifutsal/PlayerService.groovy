@@ -9,6 +9,7 @@ class PlayerService {
     def result 
     def lastUpdate = new Date()
     def player
+    ErrorHandler errorHandler
 
     def showData(params) {
 

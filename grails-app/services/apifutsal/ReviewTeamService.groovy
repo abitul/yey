@@ -8,6 +8,7 @@ class ReviewTeamService {
     def result 
     def lastUpdate = new Date()
     def reviewTeam
+    ErrorHandler errorHandler
 
     def showData(params) {
 

@@ -8,6 +8,8 @@ class PlayingService {
     def result 
     def lastUpdate = new Date()
     def playing
+    ErrorHandler errorHandler
+
     def showData(params) {
 
         try{

@@ -8,6 +8,7 @@ class ScheduleService {
     def result 
     def lastUpdate = new Date()
     def schedule
+    ErrorHandler errorHandler
 
     def showData(params) {
 

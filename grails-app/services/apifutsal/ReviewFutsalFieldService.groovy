@@ -8,6 +8,7 @@ class ReviewFutsalFieldService {
     def result 
     def lastUpdate = new Date()
     def reviewFutsalField
+    ErrorHandler errorHandler
 
     def showData(params) {
 

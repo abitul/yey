@@ -11,6 +11,7 @@ class StadionService {
     def filePath
     def grailsApplication 
     def stadion
+    ErrorHandler errorHandler
 
     ImageEncrypter imageEncrypter 
     

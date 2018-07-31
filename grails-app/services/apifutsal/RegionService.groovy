@@ -7,6 +7,7 @@ class RegionService {
 
     def result 
     def lastUpdate = new Date()
+    ErrorHandler errorHandler
 
     def showData(params) {
 
