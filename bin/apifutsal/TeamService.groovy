@@ -40,11 +40,11 @@ class TeamService {
                         twitter: team.twitter    
                     ],
                     message : "success get data",
-                    isSuccessFull : true,                    
+                    isSuccessFull : true                  
                 ]
             }
         }catch(e){
-            errorChecking(null, "ERROR_GET_DATA", "Failed get Data Team", e)
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data Team", e, "team")
         }
 
         return result
@@ -66,7 +66,7 @@ class TeamService {
             sendemailService.sendDirectEmail(emailData)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e)
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "team")
         }
 
        return result
@@ -80,7 +80,7 @@ class TeamService {
             saveToDB(team,params)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data team", e)
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data team", e, "team")
         }
 
         return result
@@ -93,7 +93,7 @@ class TeamService {
             team.delete()
             result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            errorChecking(null, "ERROR_UPDATE_DATA", "Failed delete data team", e)
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data team", e, "team")
         }
 
         return result
@@ -122,27 +122,6 @@ class TeamService {
             team.validate()
             team.save(flush: true, failOnError: true)
 
-    }
-
-    def errorChecking(team, errorTag, errorAction, e){
-
-        errorHandler = new ErrorHandler()
-        if (team) {
-            if (team.errors.hasFieldErrors("idCard")) {
-                errorHandler.setError("IDCARD_NOT_UNIQUE", "Please change value in idcard "+team.errors.getFieldError("idCard").rejectedValue)
-            }
-
-            if (team.errors.hasFieldErrors("email")) {
-                errorHandler.setError("EMAIL_NOT_VALID", "Please change value in email "+team.errors.getFieldError("email").rejectedValue)
-            }
-
-            result = [errors: errorHandler.getListError(), isSuccessFull: false]
-        }else{
-            println e
-            errorHandler.setError("${errorTag}", "${errorAction} ${e}")
-            result = [errors: errorHandler.getListError(), isSuccessFull: false]
-        }
-        
     }
 
 }

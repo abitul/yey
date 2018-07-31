@@ -2,7 +2,8 @@ package apifutsal
 
 class ReviewTeamController {
 
-static responseFormats = ['json']
+    static responseFormats = ['json']     
+    static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     ReviewTeamService reviewTeamService
     def responseOfRequest

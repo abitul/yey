@@ -6,7 +6,8 @@ import grails.converters.*
 
 class futsalFieldController {
 
-    static responseFormats = ['json']
+    static responseFormats = ['json']     
+    static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     FutsalFieldService futsalFieldService
     def responseOfRequest

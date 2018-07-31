@@ -7,14 +7,16 @@ class FutsalFieldService {
 
     def result 
     def lastUpdate = new Date()
+    def futsalField
 
     def showData(params) {
+
         try{
             print lastUpdate
             if(params.stadionId){
                 def stadion = Stadion.get(params.stadionId as Integer)
                 def listData = FutsalField.findAllByStadion(stadion)
-                result = []
+                futsalField = []
                 listData.each{res->
                         def objectData = [
                                             id: res.id,
@@ -25,24 +27,31 @@ class FutsalFieldService {
                                             price: res.price,
                                             lastUpdate: res.lastUpdate
                                                                         ]
-                        result.push(objectData)
+                        futsalField.push(objectData)
                 }
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? FutsalField.listOrderByLastUpdate(order: "desc") : FutsalField.findAllByNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "name", order: "desc", offset: offset])
+                futsalField = params.searchValue ? FutsalField.findAllByNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "name", order: "desc", offset: offset]) : FutsalField.listOrderByLastUpdate(order: "desc") 
             }
+
+            result = [
+                data : futsalField,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data futsalField"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data futsalField", e, "futsalField")
         }
 
         return result
+
     }
     
     def saveData(params) {
+
         try{
-            def futsalField = new FutsalField()
+            futsalField = new FutsalField()
             print lastUpdate
             futsalField.name = params.name
             futsalField.type = params.type
@@ -52,19 +61,19 @@ class FutsalFieldService {
             futsalField.lastUpdate = lastUpdate
             def stadion = Stadion.get(params.stadionId)
             stadion.addToFutsalFields(futsalField).save(flush: true, failOnError: true)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data futsalField"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "futsalField")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def futsalField = FutsalField.get(params.id)
+            futsalField = FutsalField.get(params.id)
             print futsalField
             futsalField.name = params.name
             futsalField.type = params.type
@@ -73,28 +82,27 @@ class FutsalFieldService {
             futsalField.price = params.price
             futsalField.lastUpdate = lastUpdate
             futsalField.save(flush: true, failOnError: true)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data futsalField"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data futsalField", e, "futsalField")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def futsalField = FutsalField.get(params.id)
+            futsalField = FutsalField.get(params.id)
             futsalField.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data futsalField"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data futsalField", e, "futsalField")
         }
 
         return result
+        
     }
 }
 

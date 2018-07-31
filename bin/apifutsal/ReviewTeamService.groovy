@@ -7,30 +7,38 @@ class ReviewTeamService {
     
     def result 
     def lastUpdate = new Date()
+    def reviewTeam
 
     def showData(params) {
+
         try{
             print lastUpdate
             if(params.teamId){
                 def team = Team.get(params.teamId as Integer)
-                result = ReviewTeam.findAllByTeam(team)
+                reviewTeam = ReviewTeam.findAllByTeam(team)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? ReviewTeam.listOrderByLastUpdate(order: "desc") : ReviewTeam.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
+                reviewTeam = params.searchValue  ? ReviewTeam.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset]) : ReviewTeam.listOrderByLastUpdate(order: "desc")
             }
-            
+
+            result = [
+                data : reviewTeam,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data reviewTeam"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data reviewTeam", e, "reviewTeam")
         }
 
         return result
+
     } 
 
     def saveData(params) {
+
         try{
-            def reviewTeam = new ReviewTeam()
+            reviewTeam = new ReviewTeam()
             print lastUpdate
             reviewTeam.title = params.title
             reviewTeam.comment = params.comment
@@ -39,19 +47,19 @@ class ReviewTeamService {
             reviewTeam.lastUpdate = lastUpdate
             def team = Team.get(params.teamId)
             team.addToReviewsTeam(reviewTeam).save(flush: true, failOnError: true)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data reviewTeam"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "reviewTeam")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def reviewTeam = ReviewTeam.get(params.id)
+            reviewTeam = ReviewTeam.get(params.id)
             print reviewTeam
             reviewTeam.title = params.title
             reviewTeam.comment = params.comment
@@ -59,27 +67,26 @@ class ReviewTeamService {
             reviewTeam.idReviewer = params.idReviewer
             reviewTeam.lastUpdate = lastUpdate
             reviewTeam.save(flush: true, failOnError: true)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data reviewTeam"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data reviewTeam", e, "reviewTeam")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def reviewTeam = ReviewTeam.get(params.id)
+            reviewTeam = ReviewTeam.get(params.id)
             reviewTeam.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data reviewTeam"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data reviewTeam", e, "reviewTeam")
         }
 
         return result
+        
     }
 }

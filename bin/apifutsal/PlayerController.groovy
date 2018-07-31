@@ -6,7 +6,8 @@ import grails.converters.*
 
 class PlayerController {
 
-    static responseFormats = ['json']
+    static responseFormats = ['json']     
+    static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     PlayerService playerService
     def responseOfRequest

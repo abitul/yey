@@ -2,7 +2,8 @@ package apifutsal
 
 class RegionController {
 
-   static responseFormats = ['json']
+   static responseFormats = ['json']     
+   static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     RegionService regionService
     def responseOfRequest

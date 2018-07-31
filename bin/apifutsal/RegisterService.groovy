@@ -12,6 +12,7 @@ class RegisterService {
     def springSecurityService
 
     def saveData(params) {
+
         try{
 
             Role roleUser = new Role(authority: params.roleUser).save(flush: true)
@@ -35,8 +36,9 @@ class RegisterService {
                 result = stadionService.saveData(params)
             }
         }catch(e){
-            print "error saving data"
-            print e
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data register", e, "register")
         }
+
     }
+    
 }

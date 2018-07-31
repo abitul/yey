@@ -7,30 +7,39 @@ class ReviewFutsalFieldService {
 
     def result 
     def lastUpdate = new Date()
+    def reviewFutsalField
 
     def showData(params) {
+
         try{
             print lastUpdate
             if(params.futsalFieldId){
                 def futsalField = FutsalField.get(params.futsalFieldId as Integer)
-                result = ReviewFutsalField.findAllByFutsalField(futsalField)
+                reviewFutsalField = ReviewFutsalField.findAllByFutsalField(futsalField)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? ReviewFutsalField.listOrderByLastUpdate(order: "desc") : ReviewFutsalField.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset])
+                reviewFutsalField = params.searchValue  ? ReviewFutsalField.findAllByTitleIlike("%${params.searchValue}%",[max: params.int("max"), sort: "star", order: "desc", offset: offset]) : ReviewFutsalField.listOrderByLastUpdate(order: "desc")
             }
             
+
+            result = [
+                data : reviewFutsalField,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data reviewFutsalField"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data reviewFutsalField", e, "reviewFutsalField")
         }
 
         return result
+
     } 
 
     def saveData(params) {
+
         try{
-            def reviewFutsalField = new ReviewFutsalField()
+            reviewFutsalField = new ReviewFutsalField()
             print lastUpdate
             reviewFutsalField.title = params.title
             reviewFutsalField.comment = params.comment
@@ -39,19 +48,19 @@ class ReviewFutsalFieldService {
             reviewFutsalField.lastUpdate = lastUpdate
             def futsalField = FutsalField.get(params.futsalFieldId)
             futsalField.addToReviewsFutsalField(reviewFutsalField).save(flush: true, failOnError: true)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data reviewFutsalField"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "reviewFutsalField")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def reviewFutsalField = ReviewFutsalField.get(params.id)
+            reviewFutsalField = ReviewFutsalField.get(params.id)
             print reviewFutsalField
             reviewFutsalField.title = params.title
             reviewFutsalField.comment = params.comment
@@ -59,27 +68,26 @@ class ReviewFutsalFieldService {
             reviewFutsalField.idReviewer = params.idReviewer
             reviewFutsalField.lastUpdate = lastUpdate
             reviewFutsalField.save(flush: true, failOnError: true)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data reviewFutsalField"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data reviewFutsalField", e, "reviewFutsalField")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def reviewFutsalField = ReviewFutsalField.get(params.id)
+            reviewFutsalField = ReviewFutsalField.get(params.id)
             reviewFutsalField.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data reviewFutsalField"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data reviewFutsalField", e, "reviewFutsalField")
         }
 
         return result
+        
     }
 }

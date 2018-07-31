@@ -7,32 +7,41 @@ class BookingService {
     
     def result 
     def createdDate = new Date()
+    def booking
     RandomGenerator randomGenerator
     
     def showData(params) {
+
         try{
             print createdDate
             if(params.teamId){
                 def team = Team.get(params.teamId as Integer)
-                result = Booking.findAllByTeam(team)
+                booking = Booking.findAllByTeam(team)
             }else if(params.stadionId){
-                result = Booking.findAllByStadionId(params.stadionId)
+                booking = Booking.findAllByStadionId(params.stadionId)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? Booking.listOrderByCreatedDate(order: "desc") : Booking.findAllByBookingCodeIlike("%${params.searchValue}%",[max: params.int("max"), sort: "bookingCode", order: "desc", offset: offset])
+                booking = params.searchValue ? Booking.findAllByBookingCodeIlike("%${params.searchValue}%",[max: params.int("max"), sort: "bookingCode", order: "desc", offset: offset]) : Booking.listOrderByCreatedDate(order: "desc") 
             }
+
+            result = [
+                data : booking,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+            
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data booking"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data Booking", e, "booking")
         }
 
         return result
+
     }
 
     def saveData(params) {
+
         try{
-            def booking = new Booking()
+            booking = new Booking()
             print createdDate
             booking.startTime =  Date.parse("yyyy-MM-dd H:mm:s", params.startTime)
             booking.endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
@@ -46,19 +55,19 @@ class BookingService {
             booking.createdDate = createdDate
             def team = Team.get(params.teamId)
             team.addToBookings(booking).save(flush: true, failOnError: true)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data booking"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "booking")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def booking = Booking.get(params.id)
+            booking = Booking.get(params.id)
             print booking
             if(params.isWannaToBattle){
                 booking.versusTeamId = params.versusTeamId
@@ -76,27 +85,26 @@ class BookingService {
             }
 
             booking.save(flush: true, failOnError: true)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data booking"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data booking", e, "booking")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def booking = Booking.get(params.id)
+            booking = Booking.get(params.id)
             booking.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data booking"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data booking", e, "booking")
         }
 
         return result
+        
     }
 }

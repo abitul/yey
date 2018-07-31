@@ -7,8 +7,10 @@ class ScheduleService {
 
     def result 
     def lastUpdate = new Date()
+    def schedule
 
     def showData(params) {
+
         try{
             println lastUpdate
            // find by stadion name
@@ -16,7 +18,7 @@ class ScheduleService {
             def listFutsalField = FutsalField.findAllByStadion(stadion)
             def startTime = Date.parse("yyyy-MM-dd H:mm:s", params.startTime)
             def endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
-            result = []
+            schedule = []
             listFutsalField.each{res->
                     def listBookingOfFutsalField = Booking.findAllByFutsalFieldIdAndStartTimeAndEndTime(res.id, startTime , endTime)
                     println "mantap gann..."
@@ -31,14 +33,20 @@ class ScheduleService {
                                         stadionId : params.stadionId,
                                         price: res.price,
                                         isReady: status ]
-                    result.push(objectData) 
+                    schedule.push(objectData) 
             }
+
+            result = [
+                data : schedule,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data schedule"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data Team", e, "team")
         }
 
         return result
+        
     }
 }

@@ -7,7 +7,8 @@ import grails.converters.*
 
 class TeamController {
 
-    static responseFormats = ['json']
+    static responseFormats = ['json']     
+    static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     TeamService teamService
     def responseOfRequest

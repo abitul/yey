@@ -7,14 +7,15 @@ class PlayingService {
 
     def result 
     def lastUpdate = new Date()
-
+    def playing
     def showData(params) {
+
         try{
             print lastUpdate
-            result = []
+            playing = []
             def startTime =  Date.parse("yyyy-MM-dd H:mm:s", params.startTime)
             def endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
-            def listData = params.isBattle.toBoolean() ? Booking.findAllByVersusTeamIdIsNotNullAndCreatedDateBetween(startTime, endTime) : Booking.findAllByVersusTeamIdIsNullAndCreatedDateBetween(startTime, endTime)
+            def listData = params.isBattle.toBoolean() ? Booking.findAllByVersusTeamIdIsNullAndCreatedDateBetween(startTime, endTime) : Booking.findAllByVersusTeamIdIsNotNullAndCreatedDateBetween(startTime, endTime) 
             println listData
             listData.each{res->
                     def stadion = Stadion.get(res.stadionId)
@@ -38,66 +39,72 @@ class PlayingService {
                         futsalFieldName: futsalField.name
                     ]
 
-                    result.push(objectData)
+                    playing.push(objectData)
             }
+
+            result = [
+                data : playing,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data playing"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data playing", e, "playing")
         }
 
         return result
+
     }
 
     def saveData(params) {
+
         try{
-            def playing = new Playing()
+            playing = new Playing()
             print lastUpdate
             playing.type = params.type
             playing.idVersus = params.idVersus
             playing.teamVersus = params.teamVersus
             playing.lastUpdate = lastUpdate
             playing.save(flush: true, failOnError: true)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data playing"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "playing")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def playing = Playing.get(params.id)
+            playing = Playing.get(params.id)
             print playing
             playing.type = params.type
             playing.idVersus = params.idVersus
             playing.teamVersus = params.teamVersus
             playing.lastUpdate = lastUpdate
             playing.save(flush: true, failOnError: true)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data playing"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data playing", e, "playing")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def playing = Playing.get(params.id)
+            playing = Playing.get(params.id)
             playing.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data playing"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data playing", e, "playing")
         }
 
         return result
+        
     }
 }

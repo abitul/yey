@@ -2,7 +2,8 @@ package apifutsal
 
 class ScheduleController {
 
-    static responseFormats = ['json']
+    static responseFormats = ['json']     
+    static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     ScheduleService scheduleService
     def responseOfRequest

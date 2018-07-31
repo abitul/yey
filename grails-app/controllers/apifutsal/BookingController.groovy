@@ -2,7 +2,8 @@ package apifutsal
 
 class BookingController {
 
-    static responseFormats = ['json']
+    static responseFormats = ['json']    
+    static allowedMethods = [save: "POST", show: "GET", update: "PUT", delete: "DELETE"]
 
     BookingService bookingService
     def responseOfRequest

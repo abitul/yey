@@ -8,29 +8,38 @@ class PlayerService {
 
     def result 
     def lastUpdate = new Date()
+    def player
 
     def showData(params) {
+
         try{
             print lastUpdate
             if(params.teamId){
                 def team = Team.get(params.teamId as Integer)
-                result = Player.findAllByTeam(team)
+                player = Player.findAllByTeam(team)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? Player.listOrderByLastUpdate(order: "desc") : Player.findAllByPlayerNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "playerName", order: "desc", offset: offset])
+                player = params.searchValue  ? Player.findAllByPlayerNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "playerName", order: "desc", offset: offset]) : Player.listOrderByLastUpdate(order: "desc") 
             }
+
+            result = [
+                data : player,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data player"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data player", e, "player")
         }
 
         return result
+
     }
 
     def saveData(params) {
+
         try{
-            def player = new Player()
+            player = new Player()
             print lastUpdate
             player.playerName = params.playerName
             player.age = params.age
@@ -42,19 +51,19 @@ class PlayerService {
             player.lastUpdate = lastUpdate
             def team = Team.get(params.teamId)
             team.addToPlayers(player).save(flush: true, failOnError: true)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data player"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "player")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def player = Player.get(params.id)
+            player = Player.get(params.id)
             print player
             player.playerName = params.playerName
             player.age = params.age
@@ -65,28 +74,27 @@ class PlayerService {
             player.twitter = params.twitter
             player.lastUpdate = lastUpdate
             player.save(flush: true, failOnError: true)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data player"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data player", e, "player")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def player = Player.get(params.id)
+            player = Player.get(params.id)
             player.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data player"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data player", e, "player")
         }
 
         return result
+        
     }
 }
 

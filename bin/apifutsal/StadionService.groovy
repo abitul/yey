@@ -10,15 +10,17 @@ class StadionService {
     def lastUpdate = new Date()
     def filePath
     def grailsApplication 
+    def stadion
 
     ImageEncrypter imageEncrypter 
     
     def showData(params) {
+
         try{
             print lastUpdate
             if (params.id){
-                def stadion = Stadion.get(params.id as Integer)
-                result = [   
+                stadion = Stadion.get(params.id as Integer)
+                stadion = [   
                             stadionName : stadion.stadionName,
                             idCard : stadion.idCard,
                             province : stadion.province,
@@ -39,61 +41,67 @@ class StadionService {
                             facilities : stadion.facilities    ]
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                result = params.searchValue == "" ? Stadion.listOrderByLastUpdate(order: "desc") : Stadion["findAllBy${params.searchBy}Ilike"]("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset])
+                stadion = params.searchValue  ? Stadion["findAllBy${params.searchBy}Ilike"]("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset]) : Stadion.listOrderByLastUpdate(order: "desc") 
             }
+
+            result = [
+                data : stadion,
+                message : "success get data",
+                isSuccessFull : true
+            ]
             
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data stadion"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data stadion", e, "stadion")
         }
 
         return result
+
     }
 
     def saveData(params) {
+
         try{
-            def stadion = new Stadion()
+            stadion = new Stadion()
             saveToDB(stadion,params)
-            result = [message: "success insert data"]
+            result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            print "error saving data"
-            print e
-            result = [message: "failed save data stadion"]
+            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "stadion")
         }
 
         return result
+
     }
 
     def updateData(params) {
+
         try{
-            def stadion = Stadion.get(params.id)
+            stadion = Stadion.get(params.id)
             saveToDB(stadion,params)
-            result = [message: "success update data"]
+            result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            print "error updating data"
-            print e
-            result = [message: "failed update data stadion"]
+            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data stadion", e, "stadion")
         }
 
         return result
+
     }
 
     def deleteData(params) {
+
         try{
-            def stadion = Stadion.get(params.id)
+            stadion = Stadion.get(params.id)
             stadion.delete()
-            result = [message: "success delete"]
+            result = [message: "success delete", isSuccessFull : true]
         }catch(e){
-            print "error deleting data"
-            print e
-            result = [message: "failed delete data stadion"]
+            result = errorHandler.errorChecking(null, "ERROR_DELETE_DATA", "Failed delete data stadion", e, "stadion")
         }
 
         return result
+
     }
 
     def saveToDB(stadion,params){
+
             stadion.stadionName = params.stadionName
             stadion.idCard = params.idCard
             stadion.province = params.province
@@ -117,6 +125,7 @@ class StadionService {
             }
             stadion.lastUpdate = lastUpdate
             stadion.save(flush: true, failOnError: true)
+            
     }
 }
 

@@ -9,11 +9,12 @@ class RegionService {
     def lastUpdate = new Date()
 
     def showData(params) {
+
         try{
             print lastUpdate
 
             def criteriaRegion = Region.createCriteria()
-            result = [ "${params.searchFor}" : criteriaRegion.list{
+            def region = [ "${params.searchFor}" : criteriaRegion.list{
                         
                         if(params.searchValue && params.searchValue !=""){
                             ilike ("${params.searchBy}","%${params.searchValue}%")
@@ -25,13 +26,18 @@ class RegionService {
                     order("${params.searchFor}", "asc")
             }]
 
+            result = [
+                data : region,
+                message : "success get data",
+                isSuccessFull : true
+            ]
+
         }catch(e){
-            print "error gettting data"
-            print e
-            result = [message: "failed get data region"]
+            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data Region", e, "region")
         }
 
         return result
+        
     }
 
 }
