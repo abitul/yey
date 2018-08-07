@@ -11,7 +11,7 @@ class StadionService {
     def filePath
     def grailsApplication 
     def stadion
-
+    ErrorHandler errorHandler
     ImageEncrypter imageEncrypter 
     
     def showData(params) {
@@ -20,28 +20,11 @@ class StadionService {
             print lastUpdate
             if (params.id){
                 stadion = Stadion.get(params.id as Integer)
-                stadion = [   
-                            stadionName : stadion.stadionName,
-                            idCard : stadion.idCard,
-                            province : stadion.province,
-                            districs : stadion.districs,
-                            subDistrics : stadion.subDistrics,
-                            kelurahan : stadion.kelurahan,
-                            zipCode : stadion.zipCode,
-                            adress : stadion.adress,
-                            contactNo : stadion.contactNo,
-                            guard : stadion.guard,
-                            imageProfile : stadion.imageProfile,
-                            base64Image : imageEncrypter.getBase64File(grailsApplication.config.properties.profileStadionPath+"\\${stadion.imageProfile}"),
-                            countfutsalField :  stadion.countfutsalField,
-                            email : stadion.email,
-                            facebook : stadion.facebook,
-                            instagram : stadion.instagram,
-                            twitter : stadion.twitter,
-                            facilities : stadion.facilities    ]
+                stadion = mappingResponse(stadion)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
                 stadion = params.searchValue  ? Stadion["findAllBy${params.searchBy}Ilike"]("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset]) : Stadion.listOrderByLastUpdate(order: "desc") 
+                stadion = mappingResponse(stadion)
             }
 
             result = [
@@ -126,6 +109,40 @@ class StadionService {
             stadion.lastUpdate = lastUpdate
             stadion.save(flush: true, failOnError: true)
             
+    }
+
+    def mappingResponse(stadion){
+
+            def listData = []
+
+            stadion.each{  res->
+
+                def objectData = [
+                    idCard : res.idCard,
+                    province : res.province,
+                    districs : res.districs,
+                    subDistrics : res.subDistrics,
+                    kelurahan : res.kelurahan,
+                    zipCode : res.zipCode,
+                    adress : res.adress,
+                    contactNo : res.contactNo,
+                    guard : res.guard,
+                    imageProfile : res.imageProfile,
+                    base64Image : imageEncrypter.getBase64File(grailsApplication.config.properties.profileStadionPath+"\\${res.imageProfile}"),
+                    countfutsalField :  res.countfutsalField,
+                    email : res.email,
+                    facebook : res.facebook,
+                    instagram : res.instagram,
+                    twitter : res.twitter,
+                    facilities : res.facilities
+                ]
+
+                listData.push(objectData)
+
+            }
+            
+
+            return listData
     }
 }
 

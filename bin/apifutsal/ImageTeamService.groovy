@@ -10,7 +10,7 @@ class ImageTeamService {
     def filePath
     def grailsApplication 
     def imageTeam
-
+    ErrorHandler errorHandler
     ImageEncrypter imageEncrypter 
 
     def showData(params) {

@@ -11,7 +11,6 @@ class ImageTeamService {
     def grailsApplication 
     def imageTeam
     ErrorHandler errorHandler
-
     ImageEncrypter imageEncrypter 
 
     def showData(params) {

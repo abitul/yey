@@ -8,7 +8,8 @@ class DisclaimerService {
     def result 
     def lastUpdate = new Date()
     def disclaimer
-
+    ErrorHandler errorHandler
+    
     def showData(params) {
 
         try{

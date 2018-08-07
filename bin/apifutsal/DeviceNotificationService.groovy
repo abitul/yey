@@ -8,6 +8,7 @@ class DeviceNotificationService {
     def result 
     def lastUpdate = new Date()
     def deviceNotification
+    ErrorHandler errorHandler
 
     def showData(params) {
         

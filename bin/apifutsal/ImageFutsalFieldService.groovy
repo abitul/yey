@@ -11,6 +11,7 @@ class ImageFutsalFieldService {
     def grailsApplication
     def imageFutsalField
     ImageEncrypter imageEncrypter 
+    ErrorHandler errorHandler
 
     def showData(params) {
 

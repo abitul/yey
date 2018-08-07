@@ -8,6 +8,7 @@ class ErrorService {
     def result 
     def lastUpdate = new Date()
     def error
+    ErrorHandler errorHandler
 
     def showData(params) {
 

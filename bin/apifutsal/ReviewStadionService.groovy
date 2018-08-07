@@ -8,6 +8,8 @@ class ReviewStadionService {
     def result 
     def lastUpdate = new Date()
     def reviewStadion
+    ErrorHandler errorHandler
+
     def showData(params) {
 
         try{

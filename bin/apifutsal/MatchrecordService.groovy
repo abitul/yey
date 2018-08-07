@@ -8,7 +8,8 @@ class MatchRecordService {
     def result 
     def createdDate = new Date()
     def matchRecord
-    
+    ErrorHandler errorHandler
+   
     def showData(params) {
 
         try{

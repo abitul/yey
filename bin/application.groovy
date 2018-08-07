@@ -14,7 +14,8 @@ grails.plugin.springsecurity.rest.token.validation.endpointUrl = "/api/validate"
 grails.plugin.springsecurity.filterChain.chainMap = [
     [pattern: '/api/**',       filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'],
     [pattern: '/**',           filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'],
-    [pattern: '/register/**',  filters: 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor']
+    [pattern: '/register/**',  filters: 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor'],
+    [pattern: '/disclaimer/**',  filters: 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor']
 ]
 
 // Added by the Spring Security Core plugin:
@@ -35,6 +36,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     [pattern: '/**/favicon.ico', access: ['permitAll']],
     [pattern: '/api/login',      access: ['permitAll']],
     [pattern: '/register/**',    access: ['permitAll']],
+    [pattern: '/disclaimer/**',    access: ['permitAll']],
     [pattern: '/api/validate',   access: ['isFullyAuthenticated()']],
     [pattern: '/api/logout',     access: ['isFullyAuthenticated()']],
     [pattern: '/api/**',         access: ['isFullyAuthenticated()']],
@@ -48,6 +50,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/images/**',   filters: 'none'],
 	[pattern: '/**/favicon.ico', filters: 'none'],
     [pattern: '/register/**',    filters: 'none'],
+    [pattern: '/disclaimer/**',    filters: 'none'],
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
 

@@ -8,7 +8,8 @@ class NotificationService {
     def result 
     def lastUpdate = new Date()
     def notification
-    
+    ErrorHandler errorHandler
+
     def showData(params) {
 
         try{
