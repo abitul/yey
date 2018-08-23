@@ -1,8 +1,6 @@
 package apifutsal
 
 import grails.transaction.Transactional
-import static org.hibernate.sql.JoinType.*
-import org.hibernate.criterion.CriteriaSpecification
 
 @Transactional
 class ImageFutsalFieldService {
@@ -19,21 +17,19 @@ class ImageFutsalFieldService {
 
         try{
             println lastUpdate
-            imageFutsalField = []
             if(params.futsalFieldId){
-                imageFutsalField = ImageFutsalField.withCriteria(){
-                        createAlias "futsalField","ff", LEFT_OUTER_JOIN
-                        resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
-                        projections {
-                            property "id", "id"
-                            property "ff.id", "futsalFieldId"
-                            property "category", "category"
-                            property "imageName", "imageName"
-                            sqlProjection """COALESCE(this_.image_name, '${imageEncrypter.getBase64File(grailsApplication.config.properties.imageFutsalFieldPath)}'+'\\${this_.image_name}', 'No Image') as base64Image,
-                                            ["base64Image"],
-                                            [STRING]"""
-                        }
-                        eq("ff.id", params.futsalFieldId as Long)
+                def futsalField = FutsalField.get(params.futsalFieldId as Integer)
+                def listData = ImageFutsalField.findAllByFutsalField(futsalField)
+                print listData
+                imageFutsalField = []
+                listData.each{res->
+                    def objectData = [ 
+                                        id : res.id,
+                                        category : res.category,
+                                        imageName : res.imageName,
+                                        base64Image : imageEncrypter.getBase64File(grailsApplication.config.properties.imageFutsalFieldPath+"\\${res.imageName}"),
+                                        futsalFieldId : res.futsalFieldId ]
+                    imageFutsalField.push(objectData)
                 }
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
@@ -66,7 +62,7 @@ class ImageFutsalFieldService {
             imageFutsalField.category = params.category
             imageFutsalField.lastUpdate = lastUpdate
             def futsalField = FutsalField.get(params.futsalFieldId)
-            futsalField.addToImagesFutsalField(imageFutsalField).save(flush: true, failOnError: true)
+            futsalField.addToImagesFutsalField(image).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
             result = errorHandler.errorChecking(imageFutsalField, "ERROR_SAVE_DATA", "Error save data", e, "imageFutsalField")
