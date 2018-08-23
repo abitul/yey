@@ -67,7 +67,7 @@ class MatchRecordService {
             result = [message: "success insert data", isSuccessFull : true]
 
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "matchRecord")
+            result = errorHandler.errorChecking(matchRecord, "ERROR_SAVE_DATA", "Error save data", e, "matchRecord")
         }
 
         return result
@@ -84,7 +84,7 @@ class MatchRecordService {
             matchRecord.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data matchRecord", e, "matchRecord")
+            result = errorHandler.errorChecking(matchRecord, "ERROR_UPDATE_DATA", "Failed update data matchRecord", e, "matchRecord")
         }
 
         return result

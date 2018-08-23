@@ -33,8 +33,8 @@ class PlayingService {
                         team2Id: res.versusTeamId ? res.versusTeamId : null,
                         team2Name: res.versusTeamId ? team2.teamName : null,
                         province: stadion.province,
-                        districs: stadion.districs,
-                        subDistrics: stadion.subDistrics,
+                        districts: stadion.districts,
+                        subDistricts: stadion.subDistricts,
                         kelurahan: stadion.kelurahan,
                         zipCode: stadion.zipCode,
                         futsalFieldId: res.futsalFieldId,
@@ -70,7 +70,7 @@ class PlayingService {
             playing.save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "playing")
+            result = errorHandler.errorChecking(playing, "ERROR_SAVE_DATA", "Error save data", e, "playing")
         }
 
         return result
@@ -89,7 +89,7 @@ class PlayingService {
             playing.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data playing", e, "playing")
+            result = errorHandler.errorChecking(playing, "ERROR_UPDATE_DATA", "Failed update data playing", e, "playing")
         }
 
         return result

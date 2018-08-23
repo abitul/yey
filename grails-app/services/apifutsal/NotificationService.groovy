@@ -53,7 +53,7 @@ class NotificationService {
             notification.save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "notification")
+            result = errorHandler.errorChecking(notification, "ERROR_SAVE_DATA", "Error save data", e, "notification")
         }
 
         return result
@@ -78,7 +78,7 @@ class NotificationService {
             notification.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data notification", e, "notification")
+            result = errorHandler.errorChecking(notification, "ERROR_UPDATE_DATA", "Failed update data notification", e, "notification")
         }
 
         return result

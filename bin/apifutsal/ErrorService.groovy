@@ -48,7 +48,7 @@ class ErrorService {
             error.save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "error")
+            result = errorHandler.errorChecking(error, "ERROR_SAVE_DATA", "Error save data", e, "error")
         }
 
         return result
@@ -68,7 +68,7 @@ class ErrorService {
             error.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data error", e, "error")
+            result = errorHandler.errorChecking(error, "ERROR_UPDATE_DATA", "Failed update data error", e, "error")
         }
 
         return result

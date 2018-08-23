@@ -26,7 +26,7 @@ class RegisterService {
                 accountExpired: false,
                 accountLocked: false,
                 passwordExpired: false
-            ).save(flush: true)
+            ).save(flush: true, failOnError: true)
 
             UserRole.create(user, roleUser)
             def userId = User.findByUsername("${params.username}").id
@@ -37,7 +37,7 @@ class RegisterService {
                 result = stadionService.saveData(params)
             }
         }catch(e){
-            result = errorHandler.errorChecking(null, "ERROR_GET_DATA", "Failed get Data register", e, "register")
+            result = errorHandler.errorChecking(null, "ERROR_SAVE_DATA", "Failed Data register", e, "register")
         }
 
     }

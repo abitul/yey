@@ -18,12 +18,12 @@ class StadionService {
 
         try{
             print lastUpdate
-            if (params.id){
-                stadion = Stadion.get(params.id as Integer)
+            if (params.userId){
+                stadion = Stadion.findByUserId(params.userId as Integer)
                 stadion = mappingResponse(stadion)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
-                stadion = params.searchValue  ? Stadion["findAllBy${params.searchBy}Ilike"]("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset]) : Stadion.listOrderByLastUpdate(order: "desc") 
+                stadion = params.searchValue  ? Stadion.findAllByDistrictsIlike("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset]) : Stadion.listOrderByLastUpdate(order: "desc") 
                 stadion = mappingResponse(stadion)
             }
 
@@ -48,7 +48,7 @@ class StadionService {
             saveToDB(stadion,params)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "stadion")
+            result = errorHandler.errorChecking(stadion, "ERROR_SAVE_DATA", "Error save data", e, "stadion")
         }
 
         return result
@@ -62,7 +62,7 @@ class StadionService {
             saveToDB(stadion,params)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data stadion", e, "stadion")
+            result = errorHandler.errorChecking(stadion, "ERROR_UPDATE_DATA", "Failed update data stadion", e, "stadion")
         }
 
         return result
@@ -88,8 +88,8 @@ class StadionService {
             stadion.stadionName = params.stadionName
             stadion.idCard = params.idCard
             stadion.province = params.province
-            stadion.districs = params.districs
-            stadion.subDistrics = params.subDistrics
+            stadion.districts = params.districts
+            stadion.subDistricts = params.subDistricts
             stadion.kelurahan = params.kelurahan
             stadion.zipCode = params.zipCode
             stadion.adress = params.adress
@@ -102,6 +102,7 @@ class StadionService {
             stadion.instagram = params.instagram
             stadion.twitter = params.twitter
             stadion.facilities = params.facilities
+            stadion.userId = params.userId
             filePath = grailsApplication.config.properties.profileStadionPath+"\\${params.imageProfile}"
             if(params.base64Image && params.base64Image!=""){
                 imageEncrypter.saveBase64ToFile(params.base64Image, filePath)
@@ -118,10 +119,11 @@ class StadionService {
             stadion.each{  res->
 
                 def objectData = [
+                    stadionName: res.stadionName,
                     idCard : res.idCard,
                     province : res.province,
-                    districs : res.districs,
-                    subDistrics : res.subDistrics,
+                    districts : res.districts,
+                    subDistricts : res.subDistricts,
                     kelurahan : res.kelurahan,
                     zipCode : res.zipCode,
                     adress : res.adress,
@@ -134,7 +136,8 @@ class StadionService {
                     facebook : res.facebook,
                     instagram : res.instagram,
                     twitter : res.twitter,
-                    facilities : res.facilities
+                    facilities : res.facilities,
+                    userId : res.userId
                 ]
 
                 listData.push(objectData)

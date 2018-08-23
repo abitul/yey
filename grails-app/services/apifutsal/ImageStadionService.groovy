@@ -61,10 +61,10 @@ class ImageStadionService {
             imageStadion.category = params.category
             imageStadion.lastUpdate = lastUpdate
             def stadion = Stadion.get(params.stadionId)
-            stadion.addToImagesStadion(image).save(flush: true, failOnError: true)
+            stadion.addToImagesStadion(imageStadion).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "imageStadion")
+            result = errorHandler.errorChecking(imageStadion, "ERROR_SAVE_DATA", "Error save data", e, "imageStadion")
         }
 
         return result
@@ -86,7 +86,7 @@ class ImageStadionService {
             imageStadion.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data imageStadion", e, "imageStadion")
+            result = errorHandler.errorChecking(imageStadion, "ERROR_UPDATE_DATA", "Failed update data imageStadion", e, "imageStadion")
         }
 
         return result

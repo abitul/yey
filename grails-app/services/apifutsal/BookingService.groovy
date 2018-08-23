@@ -48,17 +48,16 @@ class BookingService {
             booking.endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
             booking.status = params.status
             booking.stadionId = params.stadionId
-            booking.futsalFieldId = params.futsalFieldId
             booking.versusTeamId = params.versusTeamId ? params.versusTeamId : null
             booking.bookingCode = randomGenerator.generator( (('A'..'Z')).join(), 6)
             booking.duration = params.duration
             booking.bookingFee = params.bookingFee
             booking.createdDate = createdDate
-            def team = Team.get(params.teamId)
-            team.addToBookings(booking).save(flush: true, failOnError: true)
+            def futsalField = FutsalField.get(params.futsalFieldId)
+            futsalField.addToBookings(booking).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "booking")
+            result = errorHandler.errorChecking(booking, "ERROR_SAVE_DATA", "Error save data", e, "booking")
         }
 
         return result
@@ -77,7 +76,6 @@ class BookingService {
                 booking.endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
                 booking.status = params.status
                 booking.stadionId = params.stadionId
-                booking.futsalFieldId = params.futsalFieldId
                 booking.versusTeamId = params.versusTeamId ? params.versusTeamId : null
                 booking.bookingCode = params.bookingCode
                 booking.duration = params.duration
@@ -88,7 +86,7 @@ class BookingService {
             booking.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data booking", e, "booking")
+            result = errorHandler.errorChecking(booking, "ERROR_UPDATE_DATA", "Failed update data booking", e, "booking")
         }
 
         return result

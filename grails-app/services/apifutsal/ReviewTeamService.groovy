@@ -50,7 +50,7 @@ class ReviewTeamService {
             team.addToReviewsTeam(reviewTeam).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "reviewTeam")
+            result = errorHandler.errorChecking(reviewTeam, "ERROR_SAVE_DATA", "Error save data", e, "reviewTeam")
         }
 
         return result
@@ -70,7 +70,7 @@ class ReviewTeamService {
             reviewTeam.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data reviewTeam", e, "reviewTeam")
+            result = errorHandler.errorChecking(reviewTeam, "ERROR_UPDATE_DATA", "Failed update data reviewTeam", e, "reviewTeam")
         }
 
         return result

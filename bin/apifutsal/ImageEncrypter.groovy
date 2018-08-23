@@ -5,7 +5,7 @@ class ImageEncrypter {
 
 
     def getBase64File(filePath){
-        String fileContent = new File(filePath).text
+        File fileContent = new File(filePath)
         return fileContent.bytes.encodeBase64().toString()
     }
 

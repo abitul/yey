@@ -19,8 +19,8 @@ class TeamService {
     def showData(params) {
               
         try{
-            if (params.id){
-                team = Team.get(params.id as Integer)
+            if (params.userId){
+                team = Team.findByUserId(params.userId as Integer)
                 result = [
                     data :[
                         id: team.id,
@@ -63,7 +63,7 @@ class TeamService {
                 body: "Terima Kasih telah register di futsalo",
                 userId: params.userId
             ]
-            sendemailService.sendDirectEmail(emailData)
+            sendemailService.sendEmailAsync(emailData)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
             result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "team")

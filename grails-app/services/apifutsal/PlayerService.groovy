@@ -54,7 +54,7 @@ class PlayerService {
             team.addToPlayers(player).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "player")
+            result = errorHandler.errorChecking(player, "ERROR_SAVE_DATA", "Error save data", e, "player")
         }
 
         return result
@@ -77,7 +77,7 @@ class PlayerService {
             player.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data player", e, "player")
+            result = errorHandler.errorChecking(player, "ERROR_UPDATE_DATA", "Failed update data player", e, "player")
         }
 
         return result

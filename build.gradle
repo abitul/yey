@@ -44,6 +44,7 @@ dependencies {
     compile "org.grails.plugins:spring-security-rest:2.0.0.M2"
     compile "org.grails.plugins:mail:2.0.0"
     compile "org.grails.plugins:events:3.3.2"
+    compile "org.grails.plugins:asynchronous-mail:2.0.2-3.2.x"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.1"

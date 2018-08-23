@@ -48,7 +48,7 @@ class DisclaimerService {
             disclaimer.save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "disclaimer")
+            result = errorHandler.errorChecking(disclaimer, "ERROR_SAVE_DATA", "Error save data", e, "disclaimer")
         }
 
         return result
@@ -68,7 +68,7 @@ class DisclaimerService {
             disclaimer.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data disclaimer", e, "disclaimer")
+            result = errorHandler.errorChecking(disclaimer, "ERROR_UPDATE_DATA", "Failed update data disclaimer", e, "disclaimer")
         }
 
         return result

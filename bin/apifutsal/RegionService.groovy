@@ -1,6 +1,8 @@
 package apifutsal
 
 import grails.transaction.Transactional
+import static org.hibernate.sql.JoinType.*
+import org.hibernate.criterion.CriteriaSpecification
 
 @Transactional
 class RegionService {
@@ -13,19 +15,29 @@ class RegionService {
 
         try{
             print lastUpdate
-
-            def criteriaRegion = Region.createCriteria()
-            def region = [ "${params.searchFor}" : criteriaRegion.list{
-                        
-                        if(params.searchValue && params.searchValue !=""){
-                            ilike ("${params.searchBy}","%${params.searchValue}%")
-                        }
-                        projections{
-                            groupProperty("${params.searchFor}")
-                        }
-
+            def region
+            if((params.searchCode as Integer) == 1){
+                region =  Region.withCriteria(){
+                    resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+                    if(params.searchValue && params.searchValue !=""){
+                        ilike ("${params.searchBy}","%${params.searchValue}%")
+                    }
+                    projections{
+                        property "${params.searchFor}", "${params.searchFor}"
+                        groupProperty ("${params.searchFor}")
+                    }
                     order("${params.searchFor}", "asc")
-            }]
+                }
+            }else if((params.searchCode as Integer) == 2){
+               region = Stadion.withCriteria(){
+                    resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+                    projections{
+                        property "districts", "location"
+                        groupProperty ("districts")
+                    }
+                }
+            }
+            
 
             result = [
                 data : region,

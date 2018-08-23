@@ -65,7 +65,7 @@ class ImageFutsalFieldService {
             futsalField.addToImagesFutsalField(image).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "imageFutsalField")
+            result = errorHandler.errorChecking(imageFutsalField, "ERROR_SAVE_DATA", "Error save data", e, "imageFutsalField")
         }
 
         return result
@@ -87,7 +87,7 @@ class ImageFutsalFieldService {
             imageFutsalField.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data imageFutsalField", e, "imageFutsalField")
+            result = errorHandler.errorChecking(imageFutsalField, "ERROR_UPDATE_DATA", "Failed update data imageFutsalField", e, "imageFutsalField")
         }
 
         return result

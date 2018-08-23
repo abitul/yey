@@ -62,10 +62,10 @@ class ImageTeamService {
             imageTeam.category = params.category
             imageTeam.lastUpdate = lastUpdate
             def team = Team.get(params.teamId)
-            team.addToImagesTeam(image).save(flush: true, failOnError: true)
+            team.addToImagesTeam(imageTeam).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "imageTeam")
+            result = errorHandler.errorChecking(imageTeam, "ERROR_SAVE_DATA", "Error save data", e, "imageTeam")
         }
 
         return result
@@ -87,7 +87,7 @@ class ImageTeamService {
             imageTeam.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data imageTeam", e, "imageTeam")
+            result = errorHandler.errorChecking(imageTeam, "ERROR_UPDATE_DATA", "Failed update data imageTeam", e, "imageTeam")
         }
 
         return result

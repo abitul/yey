@@ -51,7 +51,7 @@ class ReviewStadionService {
             stadion.addToReviewsStadion(reviewStadion).save(flush: true, failOnError: true)
             result = [message: "success insert data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_SAVE_DATA", "Error save data", e, "reviewStadion")
+            result = errorHandler.errorChecking(reviewStadion, "ERROR_SAVE_DATA", "Error save data", e, "reviewStadion")
         }
 
         return result
@@ -71,7 +71,7 @@ class ReviewStadionService {
             reviewStadion.save(flush: true, failOnError: true)
             result = [message: "success update data", isSuccessFull : true]
         }catch(e){
-            result = errorHandler.errorChecking(team, "ERROR_UPDATE_DATA", "Failed update data reviewStadion", e, "reviewStadion")
+            result = errorHandler.errorChecking(reviewStadion, "ERROR_UPDATE_DATA", "Failed update data reviewStadion", e, "reviewStadion")
         }
 
         return result
