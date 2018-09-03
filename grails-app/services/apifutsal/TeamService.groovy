@@ -19,8 +19,8 @@ class TeamService {
     def showData(params) {
               
         try{
-            if (params.userId){
-                team = Team.findByUserId(params.userId as Integer)
+            if (params.userId || params.teamId){
+                team = params.userId ? Team.findByUserId(params.userId as Integer) : Team.get(params.teamId as Integer)
                 result = [
                     data :[
                         id: team.id,

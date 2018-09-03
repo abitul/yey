@@ -34,6 +34,7 @@ properties:
     imageTeamPath: "D:\\New War\\Futsal Project\\ImageDir\\imageTeam"
     profileStadionPath: "D:\\New War\\Futsal Project\\ImageDir\\profileStadion"
     profileTeamPath: "D:\\New War\\Futsal Project\\ImageDir\\profileTeam"
+    proofOfPaymentPath: "D:\\New War\\Futsal Project\\ImageDir\\proofOfPayment"
 
 # Additional Properties Config #
 

@@ -16,6 +16,8 @@ class NotificationService {
             print lastUpdate
             if(params.notificationId){
                 notification = Notification.get(params.notificationId as Integer)
+            }else if(params.userId){
+                notification = Notification.findAllByUserId(params.userId as Integer)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
                 notification = params.searchValue  ? Notification.findAllByNotificationNameIlike("%${params.searchValue}%",[max: params.int("max"), sort: "notificationName", order: "desc", offset: offset]) : Notification.listOrderByLastUpdate(order: "desc") 

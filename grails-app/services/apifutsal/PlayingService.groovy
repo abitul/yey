@@ -17,7 +17,7 @@ class PlayingService {
             playing = []
             def startTime =  Date.parse("yyyy-MM-dd H:mm:s", params.startTime)
             def endTime = Date.parse("yyyy-MM-dd H:mm:s", params.endTime)
-            def listData = params.isBattle.toBoolean() ? Booking.findAllByVersusTeamIdIsNullAndCreatedDateBetween(startTime, endTime) : Booking.findAllByVersusTeamIdIsNotNullAndCreatedDateBetween(startTime, endTime) 
+            def listData = params.isBattle.toBoolean() ? Booking.findAllByVersusTeamIdIsNotNullAndCreatedDateBetween(startTime, endTime) : Booking.findAllByVersusTeamIdIsNullAndCreatedDateBetween(startTime, endTime) 
             println listData
             listData.each{res->
                     def stadion = Stadion.get(res.stadionId)
@@ -27,6 +27,7 @@ class PlayingService {
 
                     def objectData = [
                         bookingId: res.id,
+                        userIdTeam1 : team1.userId,
                         isBattle : params.isBattle.toBoolean(),
                         team1Id: res.teamId,
                         team1Name: team1.teamName,

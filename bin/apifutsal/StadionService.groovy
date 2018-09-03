@@ -20,15 +20,13 @@ class StadionService {
             print lastUpdate
             if (params.userId){
                 stadion = Stadion.findByUserId(params.userId as Integer)
-                stadion = mappingResponse(stadion)
             }else{
                 Integer offset = (params.int("page")-1) * params.int("max")
                 stadion = params.searchValue  ? Stadion.findAllByDistrictsIlike("%${params.searchValue}%",[max: params.int("max"), sort: "stadionName", order: "desc", offset: offset]) : Stadion.listOrderByLastUpdate(order: "desc") 
-                stadion = mappingResponse(stadion)
             }
 
             result = [
-                data : stadion,
+                data : mappingResponse(stadion),
                 message : "success get data",
                 isSuccessFull : true
             ]
@@ -119,6 +117,7 @@ class StadionService {
             stadion.each{  res->
 
                 def objectData = [
+                    id : res.id,
                     stadionName: res.stadionName,
                     idCard : res.idCard,
                     province : res.province,
@@ -146,6 +145,11 @@ class StadionService {
             
 
             return listData
+    }
+
+
+    def testya(){
+        return "sfsfs"
     }
 }
 
